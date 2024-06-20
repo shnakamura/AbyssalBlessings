@@ -1,5 +1,3 @@
-using AbyssalBlessings.Common.Movement;
-using AbyssalBlessings.Common.Projectiles.Components;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -28,13 +26,11 @@ public class Siren : ModProjectile
         Projectile.height = 30;
 
         Projectile.penetrate = -1;
-
-        Projectile.TryEnableComponent<ProjectileOwnerTeleport>();
     }
 
     public override void AI() {
-        if (!Owner.active || Owner.dead || Owner.ghost || !Owner.HasBuff<Buffs.Siren>()) {
-            Projectile.Kill();
+        if (!Projectile.TryGetOwner(out var owner) || !owner.HasBuff<Buffs.Siren>()) {
+            UpdateDeath();
             return;
         }
 
@@ -45,6 +41,16 @@ public class Siren : ModProjectile
         UpdateMovement();
 
         Lighting.AddLight(Projectile.Center, 0f, 0.3f, 0.7f);
+    }
+
+    private void UpdateDeath() {
+        Projectile.alpha += 5;
+
+        if (Projectile.alpha < 255) {
+            return;
+        }
+
+        Projectile.Kill();
     }
 
     private void UpdateMovement() {

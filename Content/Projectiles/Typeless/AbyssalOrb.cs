@@ -1,6 +1,4 @@
 using System;
-using AbyssalBlessings.Common.Graphics;
-using AbyssalBlessings.Common.Projectiles.Components;
 using CalamityMod.Buffs.DamageOverTime;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -50,8 +48,6 @@ public class AbyssalOrb : ModProjectile
 
         Projectile.alpha = 255;
         Projectile.timeLeft = Lifespan;
-
-        Projectile.TryEnableComponent<ProjectileFadeRenderer>();
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
@@ -74,14 +70,13 @@ public class AbyssalOrb : ModProjectile
     }
 
     private void UpdateDeath() {
-        if (Projectile.TryGetGlobalProjectile(out ProjectileFadeRenderer component)) {
-            component.FadeOut();
-        }
-        else {
-            Projectile.Kill();
+        Projectile.alpha += 5;
+
+        if (Projectile.alpha < 255) {
+            return;
         }
 
-        Projectile.velocity *= 0.9f;
+        Projectile.Kill();
     }
 
     private void UpdateMovement() {

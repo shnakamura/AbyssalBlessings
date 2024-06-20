@@ -1,7 +1,4 @@
 using System;
-using AbyssalBlessings.Common.Graphics;
-using AbyssalBlessings.Common.Movement;
-using AbyssalBlessings.Common.Projectiles.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -31,12 +28,6 @@ public class ZephyrSquid : ModProjectile
         Projectile.alpha = 255;
 
         Projectile.penetrate = -1;
-
-        Projectile.TryEnableComponent<ProjectileOwnerTeleport>(c => c.OnTeleport += (_, _) => {
-            TriggerEffects();
-        });
-
-        Projectile.TryEnableComponent<ProjectileFadeRenderer>(c => c.Data.FadeOut = false);
     }
 
     public override void AI() {
@@ -91,14 +82,13 @@ public class ZephyrSquid : ModProjectile
     }
     
     private void UpdateDeath() {
-        if (Projectile.TryGetGlobalProjectile(out ProjectileFadeRenderer component)) {
-            component.FadeOut();
-        }
-        else {
-            Projectile.Kill();
+        Projectile.alpha += 5;
+
+        if (Projectile.alpha < 255) {
+            return;
         }
 
-        Projectile.velocity *= 0.9f;
+        Projectile.Kill();
     }
 
     private void UpdateMovement(Player owner) {
