@@ -8,6 +8,9 @@ namespace AbyssalBlessings.Common.Graphics;
 /// <summary>
 ///     Handles the fading in and out of a <see cref="Projectile" />.
 /// </summary>
+/// <remarks>
+///     This normally triggers fading in/out during spawn/death, respectively.
+/// </remarks>
 public sealed class ProjectileFadeRenderer : ProjectileComponent
 {
     public sealed class FadeData

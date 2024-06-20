@@ -3,6 +3,8 @@ using Terraria;
 
 namespace AbyssalBlessings.Common.Movement;
 
+// TODO: Maybe give this a more generalized use, so it is not exclusive to player distances.
+
 /// <summary>
 ///     Handles teleporting a <see cref="Projectile"/> if it's too far away from its owner.
 /// </summary>
@@ -29,7 +31,7 @@ public sealed class ProjectileOwnerTeleport : ProjectileComponent
     /// </remarks>
     public event TeleportCallback? OnTeleport; 
 
-    /// <summary>
+    /// <summary>   
     ///     The custom data used to perform the projectile's teleports.
     /// </summary>
     public TeleportData? Data { get; set; } = new();

@@ -1,7 +1,10 @@
 using AbyssalBlessings.Common.Projectiles.Components;
+using Microsoft.Xna.Framework;
 using Terraria;
 
 namespace AbyssalBlessings.Common.Movement;
+
+// TODO: Implement behavior.
 
 /// <summary>
 ///     
@@ -11,6 +14,10 @@ namespace AbyssalBlessings.Common.Movement;
 /// </remarks>
 public sealed class ProjectileFlyingMovement : ProjectileComponent
 {
+    public sealed class MovementData;
+
+    public MovementData? Data { get; set; } = new();
+    
     public override void AI(Projectile projectile) {
         if (!Enabled) {
             return;
