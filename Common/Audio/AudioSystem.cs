@@ -9,6 +9,9 @@ using Terraria.ModLoader;
 
 namespace AbyssalBlessings.Common.Audio;
 
+/// <summary>
+///     Handles the registration and updating of <see cref="IAudioFilter"/> instances.
+/// </summary>
 [Autoload(Side = ModSide.Client)]
 public sealed class AudioManager : ModSystem
 {
@@ -34,7 +37,7 @@ public sealed class AudioManager : ModSystem
         On_SoundPlayer.Play_Inner += PlayInnerHook;
     }
 
-    public static void AddModifier(string context, int duration, AudioModifier.IntensityModifierDelegate callback) {
+    public static void AddModifier(string context, int duration, AudioModifier.ModifierCallback callback) {
         var index = Modifiers.FindIndex(modifier => modifier.Context == context);
 
         if (index == -1) {
@@ -46,9 +49,7 @@ public sealed class AudioManager : ModSystem
 
         modifier.TimeLeft = Math.Max(modifier.TimeLeft, duration);
         modifier.TimeMax = Math.Max(modifier.TimeMax, duration);
-        modifier.IntensityModifier = callback;
-
-        Modifiers[index] = modifier;
+        modifier.Modifier = callback;
     }
 
     public override void PostUpdateEverything() {
@@ -57,7 +58,7 @@ public sealed class AudioManager : ModSystem
     }
 
     private static void ApplyParameters(SoundEffectInstance instance, in AudioParameters parameters) {
-        if (instance?.IsDisposed == true) {
+        if (instance == null || instance.IsDisposed) {
             return;
         }
 
@@ -75,15 +76,13 @@ public sealed class AudioManager : ModSystem
             var modifier = Modifiers[i];
 
             modifier.TimeLeft--;
-            
+
             if (modifier.TimeLeft <= 0) {
                 Modifiers.RemoveAt(i--);
                 continue;
             }
 
-            modifier.IntensityModifier(ref newParameters, modifier.TimeLeft / (float)modifier.TimeMax);
-
-            Modifiers[i] = modifier;
+            modifier.Modifier(ref newParameters, modifier.TimeLeft / (float)modifier.TimeMax);
         }
 
         parameters = newParameters;
@@ -107,7 +106,8 @@ public sealed class AudioManager : ModSystem
         SoundPlayer self,
         ref SoundStyle style,
         Vector2? position,
-        SoundUpdateCallback updateCallback) {
+        SoundUpdateCallback updateCallback
+    ) {
         var slot = orig(self, ref style, position, updateCallback);
 
         var hasIgnoredStyle = false;
@@ -119,7 +119,12 @@ public sealed class AudioManager : ModSystem
             }
         }
 
-        if (SoundEngine.TryGetActiveSound(slot, out var sound) && sound.Sound?.IsDisposed == false && !hasIgnoredStyle) {
+        if (SoundEngine.TryGetActiveSound(slot, out var sound)
+            && sound != null
+            && sound.Sound != null
+            && !sound.Sound.IsDisposed
+            && !hasIgnoredStyle
+        ) {
             Sounds.Add(sound);
         }
 

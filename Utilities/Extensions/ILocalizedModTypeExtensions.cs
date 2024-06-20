@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 namespace AbyssalBlessings.Utilities.Extensions;
 
 /// <summary>
-///     Provides basic localization extensions.
+///     Provides basic <see cref="ILocalizedModType"/> extensions.
 /// </summary>
 public static class LocalizationExtensions
 {
