@@ -21,7 +21,7 @@ public class EidolicEdgeSoul : ModProjectile
     ///     The projectile's lifespan duration.
     /// </summary>
     /// <remarks>This is what <see cref="Projectile"/>.<see cref="Projectile.timeLeft"/> is initially set to.</remarks>
-    public const int Lifespan = 600;
+    public const int Lifespan = 300;
 
     /// <summary>
     ///     The projectile's charge duration in tick units.
