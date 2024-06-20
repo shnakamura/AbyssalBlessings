@@ -99,15 +99,10 @@ public class ZephyrSquid : ModProjectile
     }
 
     private void UpdateMovement() {
-        var offset = new Vector2(
-            TileUtils.ToPixels(3) * Owner.direction,
-            TileUtils.ToPixels(1) + MathF.Sin(Timer * 0.1f) * TileUtils.ToPixels(1)
-        );
-
-        var center = Owner.Center - offset;
+        var center = Owner.Center;
         var distance = Vector2.DistanceSquared(Projectile.Center, center);
 
-        if (distance > TileUtils.ToPixels(10) * TileUtils.ToPixels(10)) {
+        if (distance > 10f * 16f * 10f * 16f) {
             var velocity = Projectile.DirectionTo(center) * 10f;
 
             Projectile.velocity = Vector2.SmoothStep(Projectile.velocity, velocity, 0.1f);
@@ -120,7 +115,7 @@ public class ZephyrSquid : ModProjectile
 
     private void UpdateTeleport() {
         var distance = Projectile.DistanceSQ(Owner.Center);
-        var minDistance = TileUtils.ToPixels(100) * TileUtils.ToPixels(100);
+        var minDistance = 100f * 16f * 100f * 16f;
 
         if (distance <= minDistance) {
             return;

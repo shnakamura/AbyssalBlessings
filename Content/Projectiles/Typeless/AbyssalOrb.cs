@@ -41,11 +41,6 @@ public class AbyssalOrb : ModProjectile
         Volume = 0.7f
     };
 
-    public override void SetStaticDefaults() {
-        ProjectileID.Sets.TrailingMode[Type] = 2;
-        ProjectileID.Sets.TrailCacheLength[Type] = 10;
-    }
-
     public override void SetDefaults() {
         Projectile.DamageType = DamageClass.Generic;
 
@@ -61,22 +56,7 @@ public class AbyssalOrb : ModProjectile
 
         Projectile.TryEnableComponent<ProjectileFadeRenderer>();
     }
-    
-    public override void OnKill(int timeLeft) {
-        var particle = new GlowOrbParticle(
-            Projectile.Center + Main.rand.NextVector2Circular(4f, 4f),
-            Main.rand.NextVector2Circular(4f, 4f),
-            false,
-            60,
-            1f,
-            Projectile.GetAlpha(new Color(255, 244, 0))
-        );
 
-        GeneralParticleHandler.SpawnParticle(particle);
-
-        SoundEngine.PlaySound(in HitSound, Projectile.Center);
-    }
-    
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
         target.AddBuff(ModContent.BuffType<CrushDepth>(), 3 * 60);
     }
@@ -87,12 +67,32 @@ public class AbyssalOrb : ModProjectile
 
     public override void AI() {
         Projectile.rotation += Projectile.velocity.X * 0.05f;
+
+        if (!Projectile.TryGetOwner(out _)) {
+            UpdateDeath();
+            return;
+        }
         
+        UpdateMovement();
+    }
+
+    private void UpdateDeath() {
+        if (Projectile.TryGetGlobalProjectile(out ProjectileFadeRenderer component)) {
+            component.FadeOut(true);
+        }
+        else {
+            Projectile.Kill();
+        }
+        
+        Projectile.velocity *= 0.9f;
+    }
+
+    private void UpdateMovement() {
         if (Projectile.timeLeft > Lifespan - Charge) {
             Projectile.velocity *= 0.85f;
             return;
         }
-
+        
         var target = Projectile.FindTargetWithinRange(Distance);
 
         if (target == null || !target.CanBeChasedBy()) {
@@ -108,69 +108,5 @@ public class AbyssalOrb : ModProjectile
         var velocity = direction * 12f + perpendicular;
 
         Projectile.velocity = Vector2.SmoothStep(Projectile.velocity, velocity, 0.2f);
-    }
-
-    public override bool PreDraw(ref Color lightColor) {
-        var texture = ModContent.Request<Texture2D>(Texture).Value;
-        
-        var position = Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY);
-
-        var length = ProjectileID.Sets.TrailCacheLength[Type];
-        
-        var bloom = Mod.Assets.Request<Texture2D>("Assets/Textures/Effects/Bloom").Value;
-        var bloomColor = new Color(255, 244, 0, 0);
-        
-        for (var i = 0; i < length; i += 2) {
-            var trailPosition = Projectile.oldPos[i] + Projectile.Size / 2f - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY);
-            var trailProgress = 1f - i / (float)length;
-
-            Main.EntitySpriteDraw(
-                bloom,
-                trailPosition,
-                null,
-                Projectile.GetAlpha(bloomColor),
-                Projectile.rotation,
-                bloom.Size() / 2f,
-                Projectile.scale / 6f * trailProgress,
-                SpriteEffects.None
-            );
-            
-            var trailColor = new Color(255, 255, 255, 0) * trailProgress;
-
-            Main.EntitySpriteDraw(
-                texture,
-                trailPosition,
-                null,
-                Projectile.GetAlpha(trailColor),
-                Projectile.rotation,
-                texture.Size() / 2f,
-                Projectile.scale * trailProgress,
-                SpriteEffects.None
-            );
-        }
-        
-        Main.EntitySpriteDraw(
-            bloom,
-            position,
-            null,
-            Projectile.GetAlpha(bloomColor),
-            Projectile.rotation,
-            bloom.Size() / 2f,
-            Projectile.scale / 6f,
-            SpriteEffects.None
-        );
-        
-        Main.EntitySpriteDraw(
-            texture,
-            position,
-            null,
-            Projectile.GetAlpha(Color.White),
-            Projectile.rotation,
-            texture.Size() / 2f,
-            Projectile.scale,
-            SpriteEffects.None
-        );
-        
-        return false;
     }
 }

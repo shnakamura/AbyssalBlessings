@@ -42,12 +42,7 @@ public class EidolicEdgeSoul : ModProjectile
     ///     The projectile's inertia modifier assigned by the item.
     /// </summary>
     public ref float InertiaModifier => ref Projectile.ai[1];
-    
-    public override void SetStaticDefaults() {
-        ProjectileID.Sets.TrailingMode[Type] = 2;
-        ProjectileID.Sets.TrailCacheLength[Type] = 10;
-    }
-    
+
     public override void SetDefaults() {
         Projectile.DamageType = DamageClass.Melee;
 
@@ -64,29 +59,6 @@ public class EidolicEdgeSoul : ModProjectile
         Projectile.penetrate = 1;
         Projectile.extraUpdates = 1;
         
-        Projectile.TryEnableComponent<ProjectileAfterimageRenderer>(c => {
-            var baseTexture = ModContent.Request<Texture2D>(Texture + "_Afterimage");
-            var baseData = new ProjectileAfterimageRenderer.AfterimageData() {
-                Step = 2,
-                Texture = baseTexture,
-                Origin = baseTexture.Size() / 2f,
-                Color = new Color(255, 244, 0, 0),
-                OpacityModifier = static (index, length) => (index / (float)length) / 2f
-            };
-            
-            var outlineTexture = ModContent.Request<Texture2D>(Texture + "_Outline");
-            var outlineData = new ProjectileAfterimageRenderer.AfterimageData() {
-                Step = 2,
-                Texture = outlineTexture,
-                Origin = outlineTexture.Size() / 2f
-            };
-            
-            c.Data = new ProjectileAfterimageRenderer.AfterimageData[] {
-                baseData,
-                outlineData
-            };
-        });
-        
         Projectile.TryEnableComponent<ProjectileFadeRenderer>();
     }
 
@@ -99,14 +71,30 @@ public class EidolicEdgeSoul : ModProjectile
     }
     
     public override void AI() {
-        if (InertiaModifier > 0f) {
-            InertiaModifier -= 0.01f;
-        }
-        
         Projectile.rotation += Projectile.velocity.X * 0.05f;
 
         if (!Projectile.TryGetOwner(out var player)) {
+            UpdateDeath();
             return;
+        }
+        
+        UpdateMovement(player);
+    }   
+
+    private void UpdateDeath() {
+        if (Projectile.TryGetGlobalProjectile(out ProjectileFadeRenderer component)) {
+            component.FadeOut(true);
+        }
+        else {
+            Projectile.Kill();
+        }
+
+        Projectile.velocity *= 0.9f;
+    }
+
+    private void UpdateMovement(Player player) {
+        if (InertiaModifier > 0f) {
+            InertiaModifier -= 0.01f;
         }
         
         var speed = 12f * SpeedModifier;
@@ -122,51 +110,5 @@ public class EidolicEdgeSoul : ModProjectile
         else if (target != null) {
             CalamityUtils.HomeInOnNPC(Projectile, !Projectile.tileCollide, Distance, speed, inertia);
         }
-    }
-
-    public override bool PreDraw(ref Color lightColor) {
-        var position = Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY);
-
-        var bloom = Mod.Assets.Request<Texture2D>("Assets/Textures/Effects/Bloom").Value;
-        var bloomColor = new Color(255, 244, 0, 0);
-
-        Main.EntitySpriteDraw(
-            bloom,
-            position,
-            null,
-            Projectile.GetAlpha(bloomColor),
-            Projectile.rotation,
-            bloom.Size() / 2f,
-            Projectile.scale / 3f,
-            SpriteEffects.None
-        );
-        
-        var texture = ModContent.Request<Texture2D>(Texture).Value;
-        
-        Main.EntitySpriteDraw(
-            texture,
-            position,
-            null,
-            Projectile.GetAlpha(Color.White),
-            Projectile.rotation,
-            texture.Size() / 2f,
-            Projectile.scale,
-            SpriteEffects.None
-        );
-        
-        var outline = ModContent.Request<Texture2D>(Texture + "_Outline").Value;
-
-        Main.EntitySpriteDraw(
-            outline,
-            position,
-            null,
-            Projectile.GetAlpha(Color.White),
-            Projectile.rotation,
-            outline.Size() / 2f,
-            Projectile.scale,
-            SpriteEffects.None
-        );
-
-        return false;
     }
 }

@@ -47,16 +47,11 @@ public class Siren : ModProjectile
     }
 
     private void UpdateMovement() {
-        var offset = new Vector2(
-            0f,
-            TileUtils.ToPixels(4) + MathF.Sin(Timer * 0.05f) * TileUtils.ToPixels(1) / 2f
-        );
-
-        var center = Owner.Center - offset;
+        var center = Owner.Center - new Vector2(0f, 8f * 16f);
         var distance = Vector2.DistanceSquared(Projectile.Center, center);
 
         var addon = Vector2.Zero;
-        var boost = TileUtils.ToPixels(4);
+        var boost = 4f * 16f;
         
         if (Owner.controlLeft) {
             addon.X -= boost;
@@ -73,25 +68,11 @@ public class Siren : ModProjectile
         if (Owner.controlDown) {
             addon.Y += boost * 2;
         }
-        
-        if (distance > TileUtils.ToPixels(10) * TileUtils.ToPixels(10)) {
-            var velocity = Projectile.DirectionTo(center + addon) * 10f;
-
-            Projectile.velocity = Vector2.SmoothStep(Projectile.velocity, velocity, 0.15f);
-        }
-        else {
-            Projectile.Center = Vector2.SmoothStep(Projectile.Center, center + addon, 0.15f);
-            Projectile.velocity *= 0.95f;
-        }
-
-        var rotation = Projectile.velocity.X * 0.1f;
-
-        Projectile.rotation = Projectile.rotation.AngleLerp(rotation, 0.1f);
     }
 
     private void UpdateTeleport() {
         var distance = Projectile.DistanceSQ(Owner.Center);
-        var minDistance = TileUtils.ToPixels(100) * TileUtils.ToPixels(100);
+        var minDistance = 100f * 16f * 100f * 16f;
 
         if (distance <= minDistance) {
             return;
