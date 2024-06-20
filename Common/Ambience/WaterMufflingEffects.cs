@@ -10,9 +10,12 @@ public sealed class WaterMufflingEffects : ModPlayer
 {
     private float intensity;
 
+    /// <summary>
+    ///     The current intensity for sound muffling while underwater.
+    /// </summary>
     public float Intensity {
         get => intensity;
-        set => intensity = MathHelper.Clamp(value, 0f, 0.9f);
+        set => intensity = MathHelper.Clamp(value, 0f, 1f);
     }
 
     public override void PostUpdate() {
@@ -26,7 +29,7 @@ public sealed class WaterMufflingEffects : ModPlayer
         if (Intensity < 0f) {
             return;
         }
-
+        
         AudioManager.AddModifier(
             $"{nameof(AbyssalBlessings)}:{nameof(WaterMufflingEffects)}",
             60,

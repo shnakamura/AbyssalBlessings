@@ -62,12 +62,12 @@ public sealed class ProjectileFadeRenderer : ProjectileComponent
             return;
         }
 
-        if (!Data.FadingOut && projectile.timeLeft > 255 / Data.Amount) {
+        if (projectile.timeLeft > 255 / Data.Amount) {
             Data.FadingIn = true;
             Data.FadingOut = false;
         }
 
-        if (!Data.FadingIn && projectile.timeLeft < 255 / Data.Amount) {
+        if (projectile.timeLeft < 255 / Data.Amount) {
             Data.FadingIn = false;
             Data.FadingOut = true;
         }
