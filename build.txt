@@ -1,0 +1,13 @@
+displayName = Calamity Abyssal
+author = naka
+version = 0.1
+
+includeSource = true
+includePDB = true
+
+hideCode = false
+hideResources = false
+
+modReferences = CalamityMod
+
+buildIgnore = .idea/, bin/, obj/, .csproj, .cs, .sln, .editorconfig

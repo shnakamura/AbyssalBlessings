@@ -1,0 +1,171 @@
+Buffs: {
+	ZephyrSquid: {
+		DisplayName: Zephyr Squid
+		Description: * Squid Sounds *
+	}
+
+	Siren: {
+		DisplayName: Siren
+		Description: Mods.AbyssalBlessings.Buffs.Siren.Description
+	}
+}
+
+Items: {
+	ZephyrsHeart: {
+		DisplayName: Zephyr's Heart
+		Tooltip:
+			'''
+			Summons a cute little Zephyr Kraken
+			Isn’t this from a dead mod?
+			'''
+	}
+
+	SirensPearl: {
+		DisplayName: Sirens Pearl
+		Tooltip: Summons a tiny Siren to light the way
+	}
+
+	MagicalIceStone: {
+		DisplayName: Magical Ice Stone
+		Tooltip:
+			'''
+			Great for impersonating devs!
+			Transforms you into a cute arctic fox lady
+			'''
+	}
+
+	EidolicHeart: {
+		DisplayName: Eidolic Heart
+		Tooltip:
+			'''
+			Permanently increases maximum life by 100
+			Can only be used after every other health upgrade
+			A heart of a leviathan sized beast, though it doesn’t sound very appetizing it’s actually rather tasty		      
+			'''
+	}
+
+	AbyssalThrow: {
+		DisplayName: Abyssal Throw
+		Tooltip: Randomly shoots out projectiles that the Primordial Wyrm uses
+	}
+
+	EidolicEdge: {
+		DisplayName: Eidolic Edge
+		Tooltip: ""
+	}
+
+	PrimordialReaper: {
+		DisplayName: Primordial Reaper
+		Tooltip: ""
+	}
+
+	AbyssalWyrmStaff: {
+		DisplayName: Abyssal Wyrm Staff
+		Tooltip: ""
+	}
+
+	PrimordialTablet: {
+		DisplayName: Primordial Tablet
+		Tooltip: The symbol on it resembles an unknown looking letter
+	}
+
+	PrimordialWyrmLore: {
+		DisplayName: Primordial Wyrm
+		Lore:
+			'''
+			It’s crazy to think that these leviathan sized creatures can even fit down here. Their 
+			luminous appearance lights these depths so much that it’s almost blinding, they are also 
+			attracted to very bright things like that of discordian teleportation it must remind them 
+			of something rather close to them. Some say these elder leviathan's guard an important 
+			artifact that belonged to Xeroc. I’ve never had a chance to see one of these creatures, 
+			but if the story’s are true the reward could be very huge. Somehow I think these creatures 
+			may have a connection with the Goddess Of Life for what they might be protecting.
+			'''
+	}
+
+	SilvaLore: {
+		DisplayName: Silva
+		Tooltip: Her prison, her PURGATORY
+		Lore:
+			'''
+			The Goddess Of Life, the only god that I have fought to actually resist death. When 
+			she was alive she ruled over the Dryad Realm but as I challenged her, her reign came 
+			to an end and all the Dryads that tried protecting her fell as well. She has made 
+			this prison I put her in so many years ago her own beautiful garden of purgatory. 
+			I never known that as she’s been making this place more stable she’s also been 
+			making a capable vessel out of the flora here in the abyss as well as the remaining 
+			pieces of her armor and the scrap that she has made the scourges of the waters 
+			scavenge to try and rise against me again. Honestly she’s still way to weak to make 
+			it out as she’s incapable of breaking the spell that keeps her down there, but it is 
+			said that if one is gifted a pure crystal of nature from when Silva was a Goddess 
+			that the spell might break and she’ll be able to escape or perhaps a sacrifice from 
+			a stronger being like yourself. Though the chances of her getting a hold of one of 
+			her crystals is very unlikely as these crystals are very rare and not many exist 
+			anymore. By breaking her free the tectonic plates of the abyssal depths may finally 
+			no longer need to be kept alive by force. 
+			'''
+	}
+
+	XerocsKey: {
+		DisplayName: Xerocs Key
+		Tooltip: A key from Xeroc himself. Unlocks the chest at the bottom of the abyss.
+	}
+}
+
+Projectiles: {
+	AbyssalThrow.DisplayName: Abyssal Throw
+	ZephyrSquid.DisplayName: Zephyr Squid
+	Siren.DisplayName: Siren
+	PrimordialReaper.DisplayName: Primordial Reaper
+	AbyssalOrb.DisplayName: Abyssal Orb
+	EidolicEdgeSoul.DisplayName: Eidolic Edge Soul
+}
+
+NPCs: {
+	Nahlyn: {
+		DisplayName: Nahlyn
+
+		Chat: {
+			Common0: Hey not all sirens are mean, you know that right?
+			Common1: It’s sad what happened to my old home, but at least I don’t have to go through that hell again.
+			Common2: Most people mistake me for a mermaid, but we all know that mermaids don’t exist. Like come on that would be stupid!
+			Common3: My tail gets tired after having to walk around land with it so much. Why can’t I get normal legs? Maybe I could make a deal with some kind of sea witch… Actually maybe that’s a terrible idea!
+			Common4: Thank you for that fun duel… You are as powerful as they say. Just don’t brag about winning too much!
+			Common5: I hope my extra trident is helping you out… You haven’t just thrown it into a random chest have you?
+			Night: Sometimes I forget how dark the night sky is, but hey at least it’s brighter than the abyss.
+			BloodMoon: Hey I’d tread carefully if I were you… if you piss me off enough, I’m liable of tearing off your face!
+			BloodMoonHardmode: They say that if you fish during these hours, you might find a gigantic nautilus. I heard those things are dangerous!
+			Hardmode: That trident got a bit stronger after you beat that giant fleshy wall didn’t it?
+			AquaticSourge: “Those sea scourges always scared me… At least that’s one less to worry about.”
+			Leviathan0: “You know I also used be friends with a giant leviathan… That bitch isn’t that special.”
+			Leviathan1: “I hate Anahita for what she did to me… I will never forgive her even after her death.”
+			Ravager: “That ravaging amalgamation smelled worse than dead fish, thank you for dealing with it!”
+			DukeFishron: “You know that giant pigron thing? That things scales always made me jealous!”
+			Polterghast: “Those abyssal depths sure are more terrifying than they used to be. Now we all have to watch out for giant danger noodles!”
+			Silva: “The Goddess of Life really outdone herself with the floral decor of the abyss… At least that’s what I would of said if I didn’t get stuck in it every two seconds.”
+			Trident: “Wow that trident I gave you sure looks really powerful now! You could probably take out a powerful Tyrant with that thing now.”
+			Angler: “If you find a leviathan in those waters could you please throw {0} in there as bait?”
+			Amidias: “It’s great to see that old Amidias is still kicking after all these years, did you know that he always used to spoil me when I was younger.”
+			Pirate: “I heard that [Name of Pirate] fought a giant kraken and won many years ago. It’s crazy that he survived those things are dangerous!”
+			Archmage: “I heard that Permafrost was trapped inside his own castle for a very long time, poor guy… That reminds me of the time when I was almost trapped and killed inside my own home kingdom… Of course it didn’t happen, but it’s still scary knowing what can happen in this world.”
+		}
+
+		TownNPCMood: {
+			NoHome: “It was a fun duel I’ll say that for sure. But please could you make me a home? I would really appreciate it!”
+			FarFromHome: “If you aren’t too busy could you carry me home? I’m so tired of walking with this damn tail.”
+			LoveSpace: I love having so much space.
+			DislikeCrowded: “Ugh it’s so crowded, I can barely walk as it is, this is not fun!”
+			HateCrowded: “Could you please tell some of these people to go? I hate how loud it is here with them all here.”
+			Content: I am content.
+			LoveBiome: I love {BiomeName}.
+			DislikeBiome: I dislike {BiomeName}.
+			HateBiome: I hate {BiomeName}.
+			LoveNPC: I love {NPCName}.
+			LikeNPC: I like {NPCName}.
+			DislikeNPC: I dislike {NPCName}.
+			HateNPC: I hate {NPCName}.
+			LikeNPC_Princess: I like {NPCName}.
+			Princess_LovesNPC: I like {NPCName}.
+		}
+	}
+}
