@@ -2,7 +2,6 @@ using AbyssalBlessings.Common.Players;
 using AbyssalBlessings.Content.Items.Materials;
 using CalamityMod.CalPlayer;
 using CalamityMod.Items.Materials;
-using CalamityMod.Items.SummonItems;
 using CalamityMod.Tiles.Furniture.CraftingStations;
 using Terraria;
 using Terraria.ID;
@@ -23,7 +22,7 @@ public class EidolicHeart : ModItem
 
     public override void SetDefaults() {
         Item.consumable = true;
-        
+
         Item.maxStack = 20;
 
         Item.width = 44;
@@ -40,7 +39,7 @@ public class EidolicHeart : ModItem
         }
 
         var full = player.ConsumedLifeCrystals == Player.LifeCrystalMax && player.ConsumedLifeFruit == Player.LifeFruitMax;
-        
+
         if (!full) {
             return false;
         }
@@ -52,11 +51,11 @@ public class EidolicHeart : ModItem
         if (!player.TryGetModPlayer(out PlayerEidolicHearts modPlayer)) {
             return null;
         }
-        
+
         player.UseHealthMaxIncreasingItem(HealthAddon);
 
         modPlayer.EidolicHeartsConsumed++;
-        
+
         return true;
     }
 

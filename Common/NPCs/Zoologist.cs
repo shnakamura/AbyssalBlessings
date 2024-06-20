@@ -13,6 +13,6 @@ public sealed class Zoologist : GlobalNPC
     }
 
     public override void ModifyShop(NPCShop shop) {
-        shop.AddWithCustomValue<MagicalIceStone>(Item.buyPrice(platinum: 1));
+        shop.AddWithCustomValue<MagicalIceStone>(Item.buyPrice(1));
     }
 }

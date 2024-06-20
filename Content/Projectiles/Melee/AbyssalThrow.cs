@@ -1,12 +1,7 @@
 using AbyssalBlessings.Content.Projectiles.Typeless;
 using CalamityMod.Buffs.DamageOverTime;
-using CalamityMod.Particles;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria;
-using Terraria.DataStructures;
-using Terraria.Graphics;
-using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -49,72 +44,24 @@ public class AbyssalThrow : ModProjectile
     }
 
     public override void AI() {
-        foreach (var npc in Main.ActiveNPCs) {
-            if (!npc.active || !npc.CanBeChasedBy() || npc.DistanceSQ(Projectile.Center) > Distance * Distance) {
-                continue;
-            }
-            
-            if (!Main.rand.NextBool(10)) {
-                continue;
-            }
-            
-            var velocity = new Vector2(10f).RotatedByRandom(MathHelper.TwoPi);
-        
-            Projectile.NewProjectile(
-                Projectile.GetSource_FromAI(),
-                Projectile.Center,
-                velocity,
-                ModContent.ProjectileType<AbyssalOrb>(),
-                Projectile.damage,
-                Projectile.knockBack,
-                Projectile.owner
-            );
+        var target = Projectile.FindTargetWithinRange(Distance);
+
+        if (target == null || !Main.rand.NextBool(10)) {
+            return;
         }
-    }
 
-    public override bool PreDraw(ref Color lightColor) {
-        var texture = ModContent.Request<Texture2D>(Texture).Value;
-        
-        var position = Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY);
-        
-        Main.EntitySpriteDraw(
-            texture,
-            position,
-            null,
-            Projectile.GetAlpha(lightColor),
-            Projectile.rotation,
-            texture.Size() / 2f,
-            Projectile.scale,
-            SpriteEffects.None
+        var velocity = new Vector2(10f).RotatedByRandom(MathHelper.TwoPi);
+
+        Projectile.NewProjectile(
+            Projectile.GetSource_FromAI(),
+            Projectile.Center,
+            velocity,
+            ModContent.ProjectileType<AbyssalOrb>(),
+            Projectile.damage,
+            Projectile.knockBack,
+            Projectile.owner
         );
 
-        var glow = ModContent.Request<Texture2D>(Texture + "_Glow").Value;
-        var glowColor = new Color(255, 255, 255, 0);
-
-        Main.EntitySpriteDraw(
-            glow,
-            position,
-            null,
-            Projectile.GetAlpha(glowColor),
-            Projectile.rotation,
-            glow.Size() / 2f,
-            Projectile.scale,
-            SpriteEffects.None
-        );
-
-        var outline = ModContent.Request<Texture2D>(Texture + "_Outline").Value;
-
-        Main.EntitySpriteDraw(
-            outline,
-            position,
-            null,
-            Projectile.GetAlpha(Color.White),
-            Projectile.rotation,
-            outline.Size() / 2f,
-            Projectile.scale,
-            SpriteEffects.None
-        );
-
-        return false;
+        Projectile.netUpdate = true;
     }
 }

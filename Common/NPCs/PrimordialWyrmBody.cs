@@ -1,4 +1,3 @@
-using System;
 using CalamityMod.NPCs.PrimordialWyrm;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

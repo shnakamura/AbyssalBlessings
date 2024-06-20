@@ -1,4 +1,3 @@
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace AbyssalBlessings.Content.Items.Accessories;

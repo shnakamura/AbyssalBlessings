@@ -1,13 +1,6 @@
-using System;
-using AbyssalBlessings.Content.Items.Consumables;
-using AbyssalBlessings.Content.Items.Materials;
-using AbyssalBlessings.Content.Items.Weapons.Melee;
-using CalamityMod.NPCs.PrimordialWyrm;
-using CalamityMod.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
-using Terraria.GameContent.ItemDropRules;
 using Terraria.ModLoader;
 
 namespace AbyssalBlessings.Common.NPCs;
@@ -17,7 +10,7 @@ public sealed class PrimordialWyrmTail : GlobalNPC
     public override bool AppliesToEntity(NPC entity, bool lateInstantiation) {
         return entity.type == ModContent.NPCType<CalamityMod.NPCs.PrimordialWyrm.PrimordialWyrmTail>();
     }
-    
+
     public override void SetDefaults(NPC entity) {
         entity.width = 60;
         entity.height = 100;
@@ -38,12 +31,12 @@ public sealed class PrimordialWyrmTail : GlobalNPC
             npc.scale,
             SpriteEffects.None
         );
-        
+
         var glow = Mod.Assets.Request<Texture2D>("Assets/Textures/NPCs/PrimordialWyrmTail_Glow").Value;
-       
+
         spriteBatch.End();
         spriteBatch.Begin(
-            SpriteSortMode.Deferred, 
+            SpriteSortMode.Deferred,
             BlendState.Additive,
             Main.DefaultSamplerState,
             default,
@@ -51,7 +44,7 @@ public sealed class PrimordialWyrmTail : GlobalNPC
             default,
             Main.GameViewMatrix.TransformationMatrix
         );
-        
+
         Main.EntitySpriteDraw(
             glow,
             position,
@@ -62,10 +55,10 @@ public sealed class PrimordialWyrmTail : GlobalNPC
             npc.scale,
             SpriteEffects.None
         );
-        
+
         spriteBatch.End();
         spriteBatch.Begin(
-            default, 
+            default,
             default,
             Main.DefaultSamplerState,
             default,
@@ -73,9 +66,9 @@ public sealed class PrimordialWyrmTail : GlobalNPC
             default,
             Main.GameViewMatrix.TransformationMatrix
         );
-        
+
         var outline = Mod.Assets.Request<Texture2D>("Assets/Textures/NPCs/PrimordialWyrmTail_Outline").Value;
-        
+
         Main.EntitySpriteDraw(
             outline,
             position,
@@ -86,7 +79,7 @@ public sealed class PrimordialWyrmTail : GlobalNPC
             npc.scale,
             SpriteEffects.None
         );
-        
+
         return false;
     }
 }

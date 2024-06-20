@@ -10,10 +10,10 @@ using Terraria.ModLoader;
 namespace AbyssalBlessings.Common.Audio;
 
 /// <summary>
-///     Handles the registration and updating of <see cref="IAudioFilter"/> instances.
+///     Handles the registration and updating of <see cref="IAudioFilter" /> instances.
 /// </summary>
 [Autoload(Side = ModSide.Client)]
-public sealed class AudioManager : ModSystem
+public sealed class AudioSystem : ModSystem
 {
     private static readonly SoundStyle[] IgnoredSoundStyles = {
         SoundID.MenuClose,
@@ -30,13 +30,22 @@ public sealed class AudioManager : ModSystem
 
     public override void Load() {
         if (!SoundEngine.IsAudioSupported) {
-            Mod.Logger.Warn($"{nameof(AudioManager)} was disabled: {nameof(SoundEngine)}.{nameof(SoundEngine.IsAudioSupported)} returned false.");
+            Mod.Logger.Warn($"{nameof(AudioSystem)} was disabled: {nameof(SoundEngine)}.{nameof(SoundEngine.IsAudioSupported)} returned false.");
             return;
         }
 
         On_SoundPlayer.Play_Inner += PlayInnerHook;
     }
 
+    /// <summary>
+    ///     Adds an audio modifier to the current audio parameters.
+    /// </summary>
+    /// <remarks>
+    ///     This automatically checks for existing modifiers with the same context and stacks them accordingly.
+    /// </remarks>
+    /// <param name="context">The modifier's context..</param>
+    /// <param name="duration">The modifier's duration in ticks.</param>
+    /// <param name="callback">The modifier's callback for modifying audio parameters.</param>
     public static void AddModifier(string context, int duration, AudioModifier.ModifierCallback callback) {
         var index = Modifiers.FindIndex(modifier => modifier.Context == context);
 

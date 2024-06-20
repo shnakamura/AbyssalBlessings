@@ -1,22 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  
-  <Import Project="..\tModLoader.targets" />
-  
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <LangVersion>latest</LangVersion>
-    <RootNamespace>AbyssalBlessings</RootNamespace>
-  </PropertyGroup>
-  
-  <ItemGroup>
-    <PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />
-  </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="CalamityMod">
-      <HintPath>lib\CalamityMod.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  
+    <Import Project="..\tModLoader.targets"/>
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <LangVersion>latest</LangVersion>
+        <RootNamespace>AbyssalBlessings</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="tModLoader.CodeAssist" Version="0.1.*"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Reference Include="CalamityMod">
+            <HintPath>lib\CalamityMod.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+
 </Project>

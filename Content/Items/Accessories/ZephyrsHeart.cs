@@ -1,8 +1,5 @@
-using AbyssalBlessings.Common.Players;
 using AbyssalBlessings.Content.Buffs;
-using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 

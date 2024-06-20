@@ -1,3 +1,4 @@
+using AbyssalBlessings.Content.Buffs;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -12,20 +13,20 @@ public class SirensPearl : ModItem
 
         Item.width = 22;
         Item.height = 24;
-        
+
         Item.useTime = 15;
         Item.useAnimation = 20;
         Item.useStyle = ItemUseStyleID.HoldUp;
 
-        Item.buffType = ModContent.BuffType<Content.Buffs.Siren>();
-        Item.shoot = ModContent.ProjectileType<Content.Projectiles.Pets.Siren>();
+        Item.buffType = ModContent.BuffType<Siren>();
+        Item.shoot = ModContent.ProjectileType<Projectiles.Pets.Siren>();
     }
 
     public override bool? UseItem(Player player) {
         if (player.whoAmI == Main.myPlayer) {
             player.AddBuff(Item.buffType, 3600);
         }
-        
+
         return true;
     }
 }

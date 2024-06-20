@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using AbyssalBlessings.Content.Items.Consumables;
 using AbyssalBlessings.Content.Items.Materials;
 using AbyssalBlessings.Content.Items.Weapons.Melee;
@@ -8,7 +6,6 @@ using CalamityMod.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
-using Terraria.GameContent;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ModLoader;
 
@@ -19,7 +16,7 @@ public sealed class PrimordialWyrmHead : GlobalNPC
     public override bool AppliesToEntity(NPC entity, bool lateInstantiation) {
         return entity.type == ModContent.NPCType<CalamityMod.NPCs.PrimordialWyrm.PrimordialWyrmHead>();
     }
-    
+
     public override void SetDefaults(NPC entity) {
         entity.width = 300;
         entity.height = 200;

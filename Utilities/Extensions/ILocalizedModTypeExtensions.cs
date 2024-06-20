@@ -4,12 +4,11 @@ using Terraria.ModLoader;
 namespace AbyssalBlessings.Utilities.Extensions;
 
 /// <summary>
-///     Provides basic <see cref="ILocalizedModType"/> extensions.
+///     Provides basic <see cref="ILocalizedModType" /> extensions.
 /// </summary>
-public static class LocalizationExtensions
+public static class ILocalizedModTypeExtensions
 {
-    /// <inheritdoc cref="ILocalizedModTypeExtensions.GetLocalizedValue"/>
-    /// <param name="args"></param>
+    /// <inheritdoc cref="Terraria.ModLoader.ILocalizedModTypeExtensions.GetLocalizedValue" />
     public static string GetLocalizedValue(this ILocalizedModType self, string suffix, params object[] args) {
         return Language.GetTextValue(self.GetLocalizationKey(suffix), args);
     }

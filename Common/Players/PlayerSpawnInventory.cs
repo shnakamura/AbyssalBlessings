@@ -12,7 +12,7 @@ public sealed class PlayerSpawnInventory : ModPlayer
         if (Player.name != "NeoXZenith" && Player.name != "Everest") {
             return Enumerable.Empty<Item>();
         }
-        
+
         return new[] {
             new Item(ModContent.ItemType<MagicalIceStone>())
         };

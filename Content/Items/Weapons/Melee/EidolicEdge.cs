@@ -1,5 +1,3 @@
-using AbyssalBlessings.Common.Graphics;
-using AbyssalBlessings.Common.Items.Components;
 using AbyssalBlessings.Content.Items.Materials;
 using AbyssalBlessings.Content.Projectiles.Melee;
 using CalamityMod.Items.Materials;
@@ -18,7 +16,7 @@ public class EidolicEdge : ModItem
 {
     public override void SetDefaults() {
         Item.autoReuse = true;
-        
+
         Item.DamageType = DamageClass.Melee;
         Item.damage = 610;
         Item.knockBack = 7;
@@ -30,21 +28,29 @@ public class EidolicEdge : ModItem
         Item.useTime = 20;
         Item.useAnimation = 20;
         Item.useStyle = ItemUseStyleID.Swing;
-        
+
         Item.value = Item.sellPrice(gold: 56);
 
         Item.shootSpeed = 10f;
         Item.shoot = ModContent.ProjectileType<EidolicEdgeSoul>();
     }
 
-    public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
+    public override bool Shoot(
+        Player player,
+        EntitySource_ItemUse_WithAmmo source,
+        Vector2 position,
+        Vector2 velocity,
+        int type,
+        int damage,
+        float knockback
+    ) {
         for (var i = 0; i < 3; i++) {
             var speedModifier = Main.rand.NextFloat(1f, 1.5f);
             var inertiaModifier = Main.rand.NextFloat(0.9f, 1f);
-            
+
             Projectile.NewProjectile(
-                source, 
-                position, 
+                source,
+                position,
                 velocity.RotatedBy(MathHelper.ToRadians(15f * i)),
                 type,
                 damage,
@@ -54,7 +60,7 @@ public class EidolicEdge : ModItem
                 inertiaModifier
             );
         }
-        
+
         return false;
     }
 
@@ -65,9 +71,9 @@ public class EidolicEdge : ModItem
             Item.position.X - Main.screenPosition.X + Item.width / 2f,
             Item.position.Y - Main.screenPosition.Y + Item.height - texture.Height / 2f
         );
-        
+
         Main.GetItemDrawFrame(Type, out _, out var frame);
-        
+
         spriteBatch.Draw(
             texture,
             position,

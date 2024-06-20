@@ -2,7 +2,7 @@ using Microsoft.Xna.Framework;
 
 namespace AbyssalBlessings.Common.Audio;
 
-public record struct AudioParameters
+public struct AudioParameters
 {
     private float lowPass;
 

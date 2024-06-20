@@ -11,7 +11,7 @@ public sealed class PlayerEidolicHearts : ModPlayer
     ///     The tag Id for syncing eidolic hearts.
     /// </summary>
     private const string Tag = "EidolicHearts";
-    
+
     /// <summary>
     ///     The amount of eidolic hearts consumed by the player.
     /// </summary>
@@ -44,7 +44,7 @@ public sealed class PlayerEidolicHearts : ModPlayer
         if (clientPlayer is not PlayerEidolicHearts modPlayer || modPlayer.EidolicHeartsConsumed == EidolicHeartsConsumed) {
             return;
         }
-        
+
         SyncPlayer(-1, Main.myPlayer, false);
     }
 

@@ -30,7 +30,10 @@ public sealed class EidolicHealthOverlay : ModResourceOverlay
             return;
         }
 
-        if (asset == TextureAssets.Heart || asset == TextureAssets.Heart2 || CompareAssets(asset, fancyPath + "Heart_Fill") || CompareAssets(asset, fancyPath + "Heart_Fill_B")) {
+        if (asset == TextureAssets.Heart
+            || asset == TextureAssets.Heart2
+            || CompareAssets(asset, fancyPath + "Heart_Fill")
+            || CompareAssets(asset, fancyPath + "Heart_Fill_B")) {
             context.texture = Mod.Assets.Request<Texture2D>("Assets/Textures/UI/EidolicHeart_Heart");
             context.Draw();
         }

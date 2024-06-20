@@ -1,4 +1,3 @@
-using AbyssalBlessings.Common.Items.Components;
 using CalamityMod;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -14,11 +13,11 @@ public class PrimordialReaper : ModItem
         Item.noMelee = true;
         Item.autoReuse = true;
         Item.noUseGraphic = true;
-        
+
         Item.DamageType = ModContent.GetInstance<RogueDamageClass>();
         Item.damage = 100;
         Item.knockBack = 4f;
-        
+
         Item.width = 80;
         Item.height = 84;
 
@@ -26,13 +25,13 @@ public class PrimordialReaper : ModItem
         Item.useTime = 20;
         Item.useAnimation = 20;
         Item.useStyle = ItemUseStyleID.Swing;
-        
+
         Item.value = Item.sellPrice(gold: 56);
 
         Item.shootSpeed = 12f;
         Item.shoot = ModContent.ProjectileType<Projectiles.Rogue.PrimordialReaper>();
     }
-    
+
     public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI) {
         var texture = ModContent.Request<Texture2D>(Texture + "_Glow").Value;
 
@@ -40,9 +39,9 @@ public class PrimordialReaper : ModItem
             Item.position.X - Main.screenPosition.X + Item.width / 2f,
             Item.position.Y - Main.screenPosition.Y + Item.height - texture.Height / 2f
         );
-        
+
         Main.GetItemDrawFrame(Item.type, out _, out var frame);
-        
+
         spriteBatch.Draw(
             texture,
             position,

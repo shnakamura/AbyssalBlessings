@@ -12,7 +12,7 @@ public sealed class AbyssalBlessings : Mod
     ///     The packet Id for syncing player stats.
     /// </summary>
     public const byte SyncStats = 0;
-    
+
     public override void HandlePacket(BinaryReader reader, int whoAmI) {
         var id = reader.ReadByte();
 
@@ -22,7 +22,7 @@ public sealed class AbyssalBlessings : Mod
                 var amount = reader.ReadByte();
 
                 var player = Main.player[index];
-                
+
                 if (!player.TryGetModPlayer(out PlayerEidolicHearts modPlayer)) {
                     return;
                 }
@@ -32,9 +32,9 @@ public sealed class AbyssalBlessings : Mod
                 if (Main.netMode != NetmodeID.Server) {
                     return;
                 }
-                
+
                 modPlayer.SyncPlayer(-1, whoAmI, false);
-                
+
                 break;
         }
     }

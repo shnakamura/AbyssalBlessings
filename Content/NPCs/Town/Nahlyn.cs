@@ -17,7 +17,6 @@ using Terraria;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.Personalities;
 using Terraria.ID;
-using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.Utilities;
 
@@ -56,7 +55,7 @@ public class Nahlyn : ModNPC
     }
 
     public override List<string> SetNPCNameList() {
-        return new List<string>() {
+        return new List<string> {
             "Nahlyn"
         };
     }
@@ -87,7 +86,7 @@ public class Nahlyn : ModNPC
 
     public override void AddShops() {
         new NPCShop(Type)
-            .AddWithCustomValue<ZephyrsHeart>(Item.buyPrice(platinum: 1))
+            .AddWithCustomValue<ZephyrsHeart>(Item.buyPrice(1))
             .AddWithCustomValue<SirensPearl>(Item.buyPrice(gold: 10))
             .AddWithCustomValue<AnechoicCoating>(Item.buyPrice(silver: 60))
             .AddWithCustomValue<SulphurskinPotion>(Item.buyPrice(silver: 60))

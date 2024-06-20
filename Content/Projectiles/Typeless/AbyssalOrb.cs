@@ -1,15 +1,10 @@
 using System;
-using System.IO;
 using AbyssalBlessings.Common.Graphics;
 using AbyssalBlessings.Common.Projectiles.Components;
 using CalamityMod.Buffs.DamageOverTime;
-using CalamityMod.Particles;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
-using Terraria.DataStructures;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace AbyssalBlessings.Content.Projectiles.Typeless;
@@ -20,18 +15,20 @@ public class AbyssalOrb : ModProjectile
     ///     The projectile's minimum distance in pixel units required for attacking.
     /// </summary>
     public const float Distance = 16f * 16f;
-    
+
     /// <summary>
     ///     The projectile's lifespan duration in tick units.
     /// </summary>
-    /// <remarks>This is what <see cref="Projectile"/>.<see cref="Projectile.timeLeft"/> is initially set to.</remarks>
+    /// <remarks>
+    ///     This is what <see cref="Projectile" />.<see cref="Projectile.timeLeft" /> is initially set to.
+    /// </remarks>
     public const int Lifespan = 120;
 
     /// <summary>
     ///     The projectile's charge duration in tick units.
     /// </summary>
     public const int Charge = 30;
-    
+
     /// <summary>
     ///     The sound played when the projectile hits an enemy.
     /// </summary>
@@ -47,7 +44,7 @@ public class AbyssalOrb : ModProjectile
         Projectile.tileCollide = false;
         Projectile.ignoreWater = true;
         Projectile.friendly = true;
-        
+
         Projectile.width = 10;
         Projectile.height = 10;
 
@@ -72,18 +69,18 @@ public class AbyssalOrb : ModProjectile
             UpdateDeath();
             return;
         }
-        
+
         UpdateMovement();
     }
 
     private void UpdateDeath() {
         if (Projectile.TryGetGlobalProjectile(out ProjectileFadeRenderer component)) {
-            component.FadeOut(true);
+            component.FadeOut();
         }
         else {
             Projectile.Kill();
         }
-        
+
         Projectile.velocity *= 0.9f;
     }
 
@@ -92,16 +89,14 @@ public class AbyssalOrb : ModProjectile
             Projectile.velocity *= 0.85f;
             return;
         }
-        
+
         var target = Projectile.FindTargetWithinRange(Distance);
 
         if (target == null || !target.CanBeChasedBy()) {
-            Projectile.velocity *= 0.85f;
-            
-            Projectile.GetGlobalProjectile<ProjectileFadeRenderer>().FadeOut(true);
+            UpdateDeath();
             return;
         }
-        
+
         var direction = Projectile.DirectionTo(target.Center);
         var perpendicular = new Vector2(-direction.Y, direction.X) * MathF.Sin(Projectile.timeLeft * 0.1f) * 4f;
 
