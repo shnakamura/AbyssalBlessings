@@ -21,6 +21,8 @@ public class Siren : ModProjectile
         Projectile.width = 30;
         Projectile.height = 30;
 
+        Projectile.alpha = 255;
+
         Projectile.penetrate = -1;
     }
 
@@ -39,6 +41,8 @@ public class Siren : ModProjectile
         Projectile.timeLeft = 2;
 
         UpdateMovement(owner);
+        
+        Lighting.AddLight(Projectile.Center, 0f, 0.5f, 0.5f);
     }
 
     private void FadeIn() {
@@ -58,13 +62,10 @@ public class Siren : ModProjectile
 
         Projectile.Kill();
     }
-
+    
     private void UpdateMovement(Player owner) {
-        var center = owner.Center - new Vector2(0f, 8f * 16f);
-        var distance = Vector2.DistanceSquared(Projectile.Center, center);
-
         var addon = Vector2.Zero;
-        var boost = 4f * 16f;
+        var boost = 8f * 16f;
 
         if (owner.controlLeft) {
             addon.X -= boost;
@@ -80,6 +81,24 @@ public class Siren : ModProjectile
 
         if (owner.controlDown) {
             addon.Y += boost * 2;
+        }
+        
+        var position = owner.Center - new Vector2(0f, 8f * 16f) + addon;
+        var direction = Projectile.DirectionTo(position);
+        
+        var speed = 12f;
+        var inertia = 10f;
+
+        var difference = position - Projectile.Center;
+        var length = difference.LengthSquared();
+        
+        var threshold = 32f;
+
+        if (length > threshold * threshold) {
+            Projectile.velocity = (Projectile.velocity * (inertia - 1f) + direction * speed) / inertia;
+        }
+        else {
+            Projectile.velocity *= 0.9f;
         }
     }
 }

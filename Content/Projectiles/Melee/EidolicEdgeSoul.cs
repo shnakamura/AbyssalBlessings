@@ -65,8 +65,14 @@ public class EidolicEdgeSoul : ModProjectile
         Projectile.alpha = (int)MathHelper.Clamp(Projectile.alpha, 0, 255);
 
         Projectile.rotation += Projectile.velocity.X * 0.05f;
-        
-        FadeIn();
+
+        if (Projectile.timeLeft > 255 / 5) {
+            FadeIn();
+        }
+
+        if (Projectile.timeLeft < 255 / 5) {
+            FadeOut();
+        }
 
         if (!Projectile.TryGetOwner(out var player)) {
             FadeOut();

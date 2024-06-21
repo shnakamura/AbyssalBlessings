@@ -104,7 +104,7 @@ public class ZephyrSquid : ModProjectile
     }
 
     private void UpdateMovement(Player owner) {
-        var position = owner.Center - new Vector2(64f * owner.direction, 32f);
+        var position = owner.Center - new Vector2(4f * 16f * owner.direction, 2f * 16f);
         var direction = Projectile.DirectionTo(position);
         
         var speed = 8f;
