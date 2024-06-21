@@ -7,10 +7,6 @@ namespace AbyssalBlessings.Content.Projectiles.Pets;
 
 public class Siren : ModProjectile
 {
-    private ref float Timer => ref Projectile.ai[0];
-
-    private Player Owner => Main.player[Projectile.owner];
-
     public override void SetStaticDefaults() {
         Main.projPet[Type] = true;
 
@@ -29,21 +25,31 @@ public class Siren : ModProjectile
     }
 
     public override void AI() {
+        Projectile.alpha = (int)MathHelper.Clamp(Projectile.alpha, 0, 255);
+
+        Projectile.rotation = Projectile.velocity.X * 0.1f;
+        
+        FadeIn();
+        
         if (!Projectile.TryGetOwner(out var owner) || !owner.HasBuff<Buffs.Siren>()) {
-            UpdateDeath();
+            FadeOut();
             return;
         }
 
         Projectile.timeLeft = 2;
 
-        Timer++;
-
-        UpdateMovement();
-
-        Lighting.AddLight(Projectile.Center, 0f, 0.3f, 0.7f);
+        UpdateMovement(owner);
     }
 
-    private void UpdateDeath() {
+    private void FadeIn() {
+        if (Projectile.alpha <= 0) {
+            return;
+        }
+
+        Projectile.alpha -= 5;
+    }
+
+    private void FadeOut() {
         Projectile.alpha += 5;
 
         if (Projectile.alpha < 255) {
@@ -53,26 +59,26 @@ public class Siren : ModProjectile
         Projectile.Kill();
     }
 
-    private void UpdateMovement() {
-        var center = Owner.Center - new Vector2(0f, 8f * 16f);
+    private void UpdateMovement(Player owner) {
+        var center = owner.Center - new Vector2(0f, 8f * 16f);
         var distance = Vector2.DistanceSquared(Projectile.Center, center);
 
         var addon = Vector2.Zero;
         var boost = 4f * 16f;
 
-        if (Owner.controlLeft) {
+        if (owner.controlLeft) {
             addon.X -= boost;
         }
 
-        if (Owner.controlRight) {
+        if (owner.controlRight) {
             addon.X += boost;
         }
 
-        if (Owner.controlUp) {
+        if (owner.controlUp) {
             addon.Y -= boost;
         }
 
-        if (Owner.controlDown) {
+        if (owner.controlDown) {
             addon.Y += boost * 2;
         }
     }

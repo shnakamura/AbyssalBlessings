@@ -31,12 +31,16 @@ public class ZephyrSquid : ModProjectile
     }
 
     public override void AI() {
+        Projectile.alpha = (int)MathHelper.Clamp(Projectile.alpha, 0, 255);
+
         scale = Vector2.SmoothStep(scale, Vector2.One, 0.2f);
 
         Projectile.rotation = Projectile.velocity.X * 0.1f;
+        
+        FadeIn();
 
-        if (!Projectile.TryGetOwner(out var owner)) {
-            UpdateDeath();
+        if (!Projectile.TryGetOwner(out var owner) || !owner.HasBuff<Buffs.ZephyrSquid>()) {
+            FadeOut();
             return;
         }
         
@@ -81,7 +85,15 @@ public class ZephyrSquid : ModProjectile
         scale = new Vector2(scale.X * 2f, scale.Y / 4f);
     }
     
-    private void UpdateDeath() {
+    private void FadeIn() {
+        if (Projectile.alpha <= 0) {
+            return;
+        }
+
+        Projectile.alpha -= 5;
+    }
+
+    private void FadeOut() {
         Projectile.alpha += 5;
 
         if (Projectile.alpha < 255) {

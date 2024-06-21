@@ -62,17 +62,29 @@ public class EidolicEdgeSoul : ModProjectile
     }
 
     public override void AI() {
+        Projectile.alpha = (int)MathHelper.Clamp(Projectile.alpha, 0, 255);
+
         Projectile.rotation += Projectile.velocity.X * 0.05f;
+        
+        FadeIn();
 
         if (!Projectile.TryGetOwner(out var player)) {
-            UpdateDeath();
+            FadeOut();
             return;
         }
 
         UpdateMovement(player);
     }
 
-    private void UpdateDeath() {
+    private void FadeIn() {
+        if (Projectile.alpha <= 0) {
+            return;
+        }
+
+        Projectile.alpha -= 5;
+    }
+
+    private void FadeOut() {
         Projectile.alpha += 5;
 
         if (Projectile.alpha < 255) {
@@ -81,7 +93,6 @@ public class EidolicEdgeSoul : ModProjectile
 
         Projectile.Kill();
     }
-
 
     private void UpdateMovement(Player player) {
         if (InertiaModifier > 0f) {
