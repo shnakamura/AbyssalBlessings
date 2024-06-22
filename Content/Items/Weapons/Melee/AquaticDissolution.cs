@@ -1,5 +1,6 @@
 using AbyssalBlessings.Content.Projectiles.Melee;
 using CalamityMod.Items;
+using CalamityMod.Items.Materials;
 using CalamityMod.Rarities;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -11,11 +12,6 @@ namespace AbyssalBlessings.Content.Items.Weapons.Melee;
 
 public class AquaticDissolution : ModItem
 {
-    public override void SetStaticDefaults() {
-        // ((ModItem)this).DisplayName.SetDefault("Aquatic Dissolution");
-        // ((ModItem)this).Tooltip.SetDefault("Fires whaling spears from the sky that bounce off tiles");
-    }
-
     public override void SetDefaults() {
         Item.autoReuse = true;
         Item.useTurn = true;
@@ -37,6 +33,27 @@ public class AquaticDissolution : ModItem
 
         Item.rare = ModContent.RarityType<Turquoise>();
         Item.value = CalamityGlobalItem.RarityTurquoiseBuyPrice;
+    }
+    
+    public override void MeleeEffects(Player player, Rectangle hitbox) {
+        if (!Main.rand.NextBool(5)) {
+            return;
+        }
+
+        var dust = Dust.NewDustDirect(
+            new Vector2(hitbox.X, hitbox.Y),
+            hitbox.Width,
+            hitbox.Height,
+            DustID.Water,
+            player.direction * 2f,
+            0f,
+            150,
+            Main.DiscoColor,
+            1.3f
+        );
+
+        dust.velocity *= 0.2f;
+        dust.noGravity = true;
     }
 
     public override void ModifyShootStats(
@@ -76,26 +93,13 @@ public class AquaticDissolution : ModItem
         return false;
     }
 
-    public override void AddRecipes() { }
-
-    public override void MeleeEffects(Player player, Rectangle hitbox) {
-        if (!Main.rand.NextBool(5)) {
-            return;
-        }
-
-        var dust = Dust.NewDustDirect(
-            new Vector2(hitbox.X, hitbox.Y),
-            hitbox.Width,
-            hitbox.Height,
-            DustID.Water,
-            player.direction * 2f,
-            0f,
-            150,
-            Main.DiscoColor,
-            1.3f
-        );
-
-        dust.velocity *= 0.2f;
-        dust.noGravity = true;
+    public override void AddRecipes() {
+        CreateRecipe()
+            .AddIngredient<Mariana>()
+            .AddIngredient<UelibloomBar>(7)
+            .AddIngredient<LifeAlloy>(2)
+            .AddIngredient<Lumenyl>(20)
+            .AddTile(TileID.LunarCraftingStation)
+            .Register();
     }
 }

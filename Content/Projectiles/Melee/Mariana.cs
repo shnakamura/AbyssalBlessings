@@ -10,10 +10,6 @@ namespace AbyssalBlessings.Content.Projectiles.Melee;
 
 public class Mariana : ModProjectile
 {
-    public override void SetStaticDefaults() {
-        // ((ModProjectile)this).DisplayName.SetDefault("Mariana");
-    }
-
     public override void SetDefaults() {
         Projectile.DamageType = DamageClass.Melee;
 

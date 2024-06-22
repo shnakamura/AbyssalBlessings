@@ -113,12 +113,12 @@ Items: {
 
 	AquaticDissolution: {
 		DisplayName: Aquatic Dissolution
-		Tooltip: ""
+		Tooltip: Fires whaling spears from the sky that bounce off tiles
 	}
 
 	Mariana: {
 		DisplayName: Mariana
-		Tooltip: ""
+		Tooltip: Tropical and deadly\nEnemies explode into water orbs on hi
 	}
 }
 
@@ -130,7 +130,7 @@ Projectiles: {
 	AbyssalOrb.DisplayName: Abyssal Orb
 	EidolicEdgeSoul.DisplayName: Eidolic Edge Soul
 	Mariana.DisplayName: Mariana
-	OceanBeam.DisplayName: Ocean Beam
+	OceanBeam.DisplayName: Spear
 }
 
 NPCs: {

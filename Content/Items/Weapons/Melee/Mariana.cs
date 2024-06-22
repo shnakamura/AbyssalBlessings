@@ -7,11 +7,6 @@ namespace AbyssalBlessings.Content.Items.Weapons.Melee;
 
 public class Mariana : ModItem
 {
-    public override void SetStaticDefaults() {
-        // ((ModItem)this).DisplayName.SetDefault("Mariana");
-        // ((ModItem)this).Tooltip.SetDefault("Tropical and deadly\nEnemies explode into water orbs on hit");
-    }
-
     public override void SetDefaults() {
         Item.autoReuse = true;
         Item.useTurn = true;

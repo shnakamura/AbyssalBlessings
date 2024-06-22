@@ -11,7 +11,6 @@ namespace AbyssalBlessings.Content.Projectiles.Melee;
 public class OceanBeam : ModProjectile
 {
     public override void SetStaticDefaults() {
-        // ((ModProjectile)this).DisplayName.SetDefault("Spear");
         Main.projFrames[Projectile.type] = 4;
 
         ProjectileID.Sets.TrailCacheLength[Projectile.type] = 4;
