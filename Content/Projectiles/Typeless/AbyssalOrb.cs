@@ -12,7 +12,7 @@ public class AbyssalOrb : ModProjectile
     /// <summary>
     ///     The projectile's minimum distance in pixel units required for attacking.
     /// </summary>
-    public const float Distance = 16f * 16f;
+    public const float MinAttackDistance = 16f * 16f;
 
     /// <summary>
     ///     The projectile's lifespan duration in tick units.
@@ -96,7 +96,7 @@ public class AbyssalOrb : ModProjectile
             return;
         }
 
-        var target = Projectile.FindTargetWithinRange(Distance);
+        var target = Projectile.FindTargetWithinRange(MinAttackDistance);
 
         if (target == null || !target.CanBeChasedBy()) {
             FadeOut();

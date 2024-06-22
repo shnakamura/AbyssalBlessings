@@ -7,6 +7,11 @@ namespace AbyssalBlessings.Content.Projectiles.Pets;
 
 public class Siren : ModProjectile
 {
+    /// <summary>
+    ///     The projectile's minimum distance in pixel units required for teleporting to the owner.
+    /// </summary>
+    public const float MinTeleportDistance = 100f * 16f;
+    
     public override void SetStaticDefaults() {
         Main.projPet[Type] = true;
 
@@ -37,12 +42,18 @@ public class Siren : ModProjectile
             FadeOut();
             return;
         }
-
+        
         Projectile.timeLeft = 2;
 
         UpdateMovement(owner);
         
         Lighting.AddLight(Projectile.Center, 0f, 0.5f, 0.5f);
+
+        if (Projectile.DistanceSQ(owner.Center) <= MinTeleportDistance * MinTeleportDistance) {
+            return;
+        }
+
+        Projectile.Center = owner.Center;
     }
 
     private void FadeIn() {

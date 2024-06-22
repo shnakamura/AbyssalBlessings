@@ -19,12 +19,12 @@ public class EidolicEdgeSoul : ModProjectile
     /// <summary>
     ///     The projectile's charge duration in tick units.
     /// </summary>
-    public const int Charge = 20;
+    public const int Charge = 10;
 
     /// <summary>
     ///     The projectile's minimum distance in pixel units required for attacking.
     /// </summary>
-    public const float Distance = 32f * 16f;
+    public const float MinAttackDistance = 32f * 16f;
 
     /// <summary>
     ///     The projectile's speed modifier assigned by the item.
@@ -108,12 +108,12 @@ public class EidolicEdgeSoul : ModProjectile
         var speed = 12f * SpeedModifier;
         var inertia = MathHelper.Lerp(20f, 80f, InertiaModifier) * SpeedModifier;
 
-        var target = Projectile.FindTargetWithinRange(Distance);
+        var target = Projectile.FindTargetWithinRange(MinAttackDistance);
 
         if (Projectile.timeLeft < Lifespan - Charge && target != null) {
-            CalamityUtils.HomeInOnNPC(Projectile, !Projectile.tileCollide, Distance, speed, inertia);
+            CalamityUtils.HomeInOnNPC(Projectile, !Projectile.tileCollide, MinAttackDistance, speed, inertia);
         }
-        else if (Projectile.DistanceSQ(player.Center) > Distance * Distance) {
+        else if (Projectile.DistanceSQ(player.Center) > MinAttackDistance * MinAttackDistance) {
             var direction = Projectile.DirectionTo(player.Center);
 
             Projectile.velocity = (Projectile.velocity * (inertia - 1f) + direction * speed) / inertia;

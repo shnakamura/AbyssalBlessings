@@ -11,6 +11,11 @@ namespace AbyssalBlessings.Content.Projectiles.Pets;
 
 public class ZephyrSquid : ModProjectile
 {
+    /// <summary>
+    ///     The projectile's minimum distance in pixel units required for teleporting to the owner.
+    /// </summary>
+    public const float MinTeleportDistance = 100f * 16f;
+    
     private Vector2 scale;
 
     public override void SetStaticDefaults() {
@@ -47,6 +52,12 @@ public class ZephyrSquid : ModProjectile
         UpdateMovement(owner);
 
         Projectile.timeLeft = 2;
+        
+        if (Projectile.DistanceSQ(owner.Center) <= MinTeleportDistance * MinTeleportDistance) {
+            return;
+        }
+
+        Projectile.Center = owner.Center;
     }
 
     public override bool PreDraw(ref Color lightColor) {
