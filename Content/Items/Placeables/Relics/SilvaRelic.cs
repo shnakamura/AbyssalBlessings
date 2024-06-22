@@ -1,9 +1,8 @@
-using CalamityMod.Items.Placeables.Furniture.BossRelics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace AbyssalBlessings.Content.Items.Relics;
+namespace AbyssalBlessings.Content.Items.Placeables.Relics;
 
 public class SilvaRelic : ModItem
 {
