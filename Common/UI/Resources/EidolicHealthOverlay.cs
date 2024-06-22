@@ -6,7 +6,7 @@ using Terraria;
 using Terraria.GameContent;
 using Terraria.ModLoader;
 
-namespace AbyssalBlessings.Common.UI;
+namespace AbyssalBlessings.Common.UI.Resources;
 
 public sealed class EidolicHealthOverlay : ModResourceOverlay
 {

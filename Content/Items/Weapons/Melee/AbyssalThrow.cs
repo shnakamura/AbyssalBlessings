@@ -1,3 +1,4 @@
+using AbyssalBlessings.Content.Rarities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -34,6 +35,8 @@ public class AbyssalThrow : ModItem
         Item.value = Item.sellPrice(gold: 56);
 
         Item.shoot = ModContent.ProjectileType<Projectiles.Melee.AbyssalThrow>();
+
+        Item.rare = ModContent.RarityType<Abyssal>();
     }
 
     public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI) {

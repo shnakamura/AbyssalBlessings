@@ -1,6 +1,4 @@
 using System;
-using AbyssalBlessings.Common.Graphics;
-using AbyssalBlessings.Common.Projectiles.Components;
 using CalamityMod.Buffs.DamageOverTime;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -14,7 +12,7 @@ public class AbyssalOrb : ModProjectile
     /// <summary>
     ///     The projectile's minimum distance in pixel units required for attacking.
     /// </summary>
-    public const float Distance = 16f * 16f;
+    public const float MinAttackDistance = 16f * 16f;
 
     /// <summary>
     ///     The projectile's lifespan duration in tick units.
@@ -50,8 +48,6 @@ public class AbyssalOrb : ModProjectile
 
         Projectile.alpha = 255;
         Projectile.timeLeft = Lifespan;
-
-        Projectile.TryEnableComponent<ProjectileFadeRenderer>();
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
@@ -63,37 +59,47 @@ public class AbyssalOrb : ModProjectile
     }
 
     public override void AI() {
+        Projectile.alpha = (int)MathHelper.Clamp(Projectile.alpha, 0, 255);
+
         Projectile.rotation += Projectile.velocity.X * 0.05f;
 
+        FadeIn();
+        
         if (!Projectile.TryGetOwner(out _)) {
-            UpdateDeath();
+            FadeOut();
             return;
         }
 
         UpdateMovement();
     }
 
-    private void UpdateDeath() {
-        if (Projectile.TryGetGlobalProjectile(out ProjectileFadeRenderer component)) {
-            component.FadeOut();
-        }
-        else {
-            Projectile.Kill();
+    private void FadeIn() {
+        if (Projectile.alpha <= 0) {
+            return;
         }
 
-        Projectile.velocity *= 0.9f;
+        Projectile.alpha -= 5;
     }
 
+    private void FadeOut() {
+        Projectile.alpha += 5;
+
+        if (Projectile.alpha < 255) {
+            return;
+        }
+
+        Projectile.Kill();
+    }
     private void UpdateMovement() {
         if (Projectile.timeLeft > Lifespan - Charge) {
             Projectile.velocity *= 0.85f;
             return;
         }
 
-        var target = Projectile.FindTargetWithinRange(Distance);
+        var target = Projectile.FindTargetWithinRange(MinAttackDistance);
 
         if (target == null || !target.CanBeChasedBy()) {
-            UpdateDeath();
+            FadeOut();
             return;
         }
 

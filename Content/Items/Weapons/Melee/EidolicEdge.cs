@@ -1,5 +1,6 @@
 using AbyssalBlessings.Content.Items.Materials;
 using AbyssalBlessings.Content.Projectiles.Melee;
+using AbyssalBlessings.Content.Rarities;
 using CalamityMod.Items.Materials;
 using CalamityMod.Items.Weapons.Melee;
 using CalamityMod.Tiles.Furniture.CraftingStations;
@@ -33,6 +34,8 @@ public class EidolicEdge : ModItem
 
         Item.shootSpeed = 10f;
         Item.shoot = ModContent.ProjectileType<EidolicEdgeSoul>();
+
+        Item.rare = ModContent.RarityType<Abyssal>();
     }
 
     public override bool Shoot(

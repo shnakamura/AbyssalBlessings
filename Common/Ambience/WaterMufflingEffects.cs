@@ -8,9 +8,6 @@ namespace AbyssalBlessings.Common.Ambience;
 [Autoload(Side = ModSide.Client)]
 public sealed class WaterMufflingEffects : ModPlayer
 {
-    private const float StepIn = 0.01f;
-    private const float StepOut = 0.05f;
-
     private float intensity;
 
     /// <summary>
@@ -21,15 +18,15 @@ public sealed class WaterMufflingEffects : ModPlayer
     /// </remarks>
     public float Intensity {
         get => intensity;
-        set => intensity = MathHelper.Clamp(value, 0f, 0.9f);
+        set => intensity = MathHelper.Clamp(value, 0f, 1f);
     }
 
     public override void PostUpdate() {
         if (Player.IsDrowning()) {
-            Intensity += StepIn;
+            Intensity += 0.01f;
         }
         else {
-            Intensity -= StepOut;
+            Intensity -= 0.05f;
         }
 
         if (Intensity < 0f) {

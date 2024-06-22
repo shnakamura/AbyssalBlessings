@@ -1,5 +1,3 @@
-using AbyssalBlessings.Common.Graphics;
-using AbyssalBlessings.Common.Projectiles.Components;
 using CalamityMod;
 using CalamityMod.Buffs.DamageOverTime;
 using Microsoft.Xna.Framework;
@@ -21,12 +19,12 @@ public class EidolicEdgeSoul : ModProjectile
     /// <summary>
     ///     The projectile's charge duration in tick units.
     /// </summary>
-    public const int Charge = 20;
+    public const int Charge = 10;
 
     /// <summary>
     ///     The projectile's minimum distance in pixel units required for attacking.
     /// </summary>
-    public const float Distance = 32f * 16f;
+    public const float MinAttackDistance = 32f * 16f;
 
     /// <summary>
     ///     The projectile's speed modifier assigned by the item.
@@ -53,8 +51,6 @@ public class EidolicEdgeSoul : ModProjectile
 
         Projectile.penetrate = 1;
         Projectile.extraUpdates = 1;
-
-        Projectile.TryEnableComponent<ProjectileFadeRenderer>();
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
@@ -66,25 +62,42 @@ public class EidolicEdgeSoul : ModProjectile
     }
 
     public override void AI() {
+        Projectile.alpha = (int)MathHelper.Clamp(Projectile.alpha, 0, 255);
+
         Projectile.rotation += Projectile.velocity.X * 0.05f;
 
+        if (Projectile.timeLeft > 255 / 5) {
+            FadeIn();
+        }
+
+        if (Projectile.timeLeft < 255 / 5) {
+            FadeOut();
+        }
+
         if (!Projectile.TryGetOwner(out var player)) {
-            UpdateDeath();
+            FadeOut();
             return;
         }
 
         UpdateMovement(player);
     }
 
-    private void UpdateDeath() {
-        if (Projectile.TryGetGlobalProjectile(out ProjectileFadeRenderer component)) {
-            component.FadeOut();
-        }
-        else {
-            Projectile.Kill();
+    private void FadeIn() {
+        if (Projectile.alpha <= 0) {
+            return;
         }
 
-        Projectile.velocity *= 0.9f;
+        Projectile.alpha -= 5;
+    }
+
+    private void FadeOut() {
+        Projectile.alpha += 5;
+
+        if (Projectile.alpha < 255) {
+            return;
+        }
+
+        Projectile.Kill();
     }
 
     private void UpdateMovement(Player player) {
@@ -95,12 +108,12 @@ public class EidolicEdgeSoul : ModProjectile
         var speed = 12f * SpeedModifier;
         var inertia = MathHelper.Lerp(20f, 80f, InertiaModifier) * SpeedModifier;
 
-        var target = Projectile.FindTargetWithinRange(Distance);
+        var target = Projectile.FindTargetWithinRange(MinAttackDistance);
 
         if (Projectile.timeLeft < Lifespan - Charge && target != null) {
-            CalamityUtils.HomeInOnNPC(Projectile, !Projectile.tileCollide, Distance, speed, inertia);
+            CalamityUtils.HomeInOnNPC(Projectile, !Projectile.tileCollide, MinAttackDistance, speed, inertia);
         }
-        else if (Projectile.DistanceSQ(player.Center) > Distance * Distance) {
+        else if (Projectile.DistanceSQ(player.Center) > MinAttackDistance * MinAttackDistance) {
             var direction = Projectile.DirectionTo(player.Center);
 
             Projectile.velocity = (Projectile.velocity * (inertia - 1f) + direction * speed) / inertia;

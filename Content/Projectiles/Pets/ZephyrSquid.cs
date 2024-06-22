@@ -1,7 +1,4 @@
 using System;
-using AbyssalBlessings.Common.Graphics;
-using AbyssalBlessings.Common.Movement;
-using AbyssalBlessings.Common.Projectiles.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -14,6 +11,11 @@ namespace AbyssalBlessings.Content.Projectiles.Pets;
 
 public class ZephyrSquid : ModProjectile
 {
+    /// <summary>
+    ///     The projectile's minimum distance in pixel units required for teleporting to the owner.
+    /// </summary>
+    public const float MinTeleportDistance = 100f * 16f;
+    
     private Vector2 scale;
 
     public override void SetStaticDefaults() {
@@ -31,27 +33,31 @@ public class ZephyrSquid : ModProjectile
         Projectile.alpha = 255;
 
         Projectile.penetrate = -1;
-
-        Projectile.TryEnableComponent<ProjectileOwnerTeleport>(c => c.OnTeleport += (_, _) => {
-            TriggerEffects();
-        });
-
-        Projectile.TryEnableComponent<ProjectileFadeRenderer>(c => c.Data.FadeOut = false);
     }
 
     public override void AI() {
+        Projectile.alpha = (int)MathHelper.Clamp(Projectile.alpha, 0, 255);
+
         scale = Vector2.SmoothStep(scale, Vector2.One, 0.2f);
 
         Projectile.rotation = Projectile.velocity.X * 0.1f;
+        
+        FadeIn();
 
-        if (!Projectile.TryGetOwner(out var owner)) {
-            UpdateDeath();
+        if (!Projectile.TryGetOwner(out var owner) || !owner.HasBuff<Buffs.ZephyrSquid>()) {
+            FadeOut();
             return;
         }
         
         UpdateMovement(owner);
 
         Projectile.timeLeft = 2;
+        
+        if (Projectile.DistanceSQ(owner.Center) <= MinTeleportDistance * MinTeleportDistance) {
+            return;
+        }
+
+        Projectile.Center = owner.Center;
     }
 
     public override bool PreDraw(ref Color lightColor) {
@@ -90,19 +96,26 @@ public class ZephyrSquid : ModProjectile
         scale = new Vector2(scale.X * 2f, scale.Y / 4f);
     }
     
-    private void UpdateDeath() {
-        if (Projectile.TryGetGlobalProjectile(out ProjectileFadeRenderer component)) {
-            component.FadeOut();
-        }
-        else {
-            Projectile.Kill();
+    private void FadeIn() {
+        if (Projectile.alpha <= 0) {
+            return;
         }
 
-        Projectile.velocity *= 0.9f;
+        Projectile.alpha -= 5;
+    }
+
+    private void FadeOut() {
+        Projectile.alpha += 5;
+
+        if (Projectile.alpha < 255) {
+            return;
+        }
+
+        Projectile.Kill();
     }
 
     private void UpdateMovement(Player owner) {
-        var position = owner.Center - new Vector2(64f * owner.direction, 32f);
+        var position = owner.Center - new Vector2(4f * 16f * owner.direction, 2f * 16f);
         var direction = Projectile.DirectionTo(position);
         
         var speed = 8f;

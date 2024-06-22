@@ -12,7 +12,7 @@ public class AbyssalThrow : ModProjectile
     /// <summary>
     ///     The projectile's minimum distance in pixel units required for attacking.
     /// </summary>
-    public const float Distance = 16f * 16f;
+    public const float MinAttackDistance = 16f * 16f;
 
     public override void SetStaticDefaults() {
         ProjectileID.Sets.YoyosLifeTimeMultiplier[Type] = -1f;
@@ -44,7 +44,7 @@ public class AbyssalThrow : ModProjectile
     }
 
     public override void AI() {
-        var target = Projectile.FindTargetWithinRange(Distance);
+        var target = Projectile.FindTargetWithinRange(MinAttackDistance);
 
         if (target == null || !Main.rand.NextBool(10)) {
             return;

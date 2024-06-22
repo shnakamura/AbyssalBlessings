@@ -110,6 +110,16 @@ Items: {
 		DisplayName: Xerocs Key
 		Tooltip: A key from Xeroc himself. Unlocks the chest at the bottom of the abyss.
 	}
+
+	AquaticDissolution: {
+		DisplayName: Aquatic Dissolution
+		Tooltip: Fires whaling spears from the sky that bounce off tiles
+	}
+
+	Mariana: {
+		DisplayName: Mariana
+		Tooltip: Tropical and deadly\nEnemies explode into water orbs on hi
+	}
 }
 
 Projectiles: {
@@ -119,6 +129,8 @@ Projectiles: {
 	PrimordialReaper.DisplayName: Primordial Reaper
 	AbyssalOrb.DisplayName: Abyssal Orb
 	EidolicEdgeSoul.DisplayName: Eidolic Edge Soul
+	Mariana.DisplayName: Mariana
+	OceanBeam.DisplayName: Spear
 }
 
 NPCs: {
@@ -168,4 +180,6 @@ NPCs: {
 			Princess_LovesNPC: I like {NPCName}.
 		}
 	}
+
+	Silva.DisplayName: Silva
 }
