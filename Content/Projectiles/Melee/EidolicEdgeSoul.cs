@@ -1,3 +1,5 @@
+using AbyssalBlessings.Common.Graphics;
+using AbyssalBlessings.Common.Projectiles.Components;
 using CalamityMod;
 using CalamityMod.Buffs.DamageOverTime;
 using Microsoft.Xna.Framework;
@@ -51,6 +53,9 @@ public class EidolicEdgeSoul : ModProjectile
 
         Projectile.penetrate = 1;
         Projectile.extraUpdates = 1;
+
+        Projectile.TryEnableComponent<ProjectileFadeIn>();
+        Projectile.TryEnableComponent<ProjectileFadeOut>();
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
@@ -62,42 +67,13 @@ public class EidolicEdgeSoul : ModProjectile
     }
 
     public override void AI() {
-        Projectile.alpha = (int)MathHelper.Clamp(Projectile.alpha, 0, 255);
-
         Projectile.rotation += Projectile.velocity.X * 0.05f;
 
-        if (Projectile.timeLeft > 255 / 5) {
-            FadeIn();
-        }
-
-        if (Projectile.timeLeft < 255 / 5) {
-            FadeOut();
-        }
-
         if (!Projectile.TryGetOwner(out var player)) {
-            FadeOut();
             return;
         }
 
         UpdateMovement(player);
-    }
-
-    private void FadeIn() {
-        if (Projectile.alpha <= 0) {
-            return;
-        }
-
-        Projectile.alpha -= 5;
-    }
-
-    private void FadeOut() {
-        Projectile.alpha += 5;
-
-        if (Projectile.alpha < 255) {
-            return;
-        }
-
-        Projectile.Kill();
     }
 
     private void UpdateMovement(Player player) {

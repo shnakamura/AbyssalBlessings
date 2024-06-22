@@ -5,20 +5,12 @@ using Terraria.DataStructures;
 namespace AbyssalBlessings.Common.Graphics;
 
 /// <summary>
-///     Handles the fading in of a <see cref="Projectile"/>.
+///     Handles the fading out of a <see cref="Projectile"/>.
 /// </summary>
-public sealed class ProjectileFadeIn : ProjectileComponent
+public sealed class ProjectileFadeOut : ProjectileComponent
 {
     public struct FadeData
     {
-        /// <summary>
-        ///     The initial opacity of the projectile.
-        /// </summary>
-        /// <remarks>
-        ///     Ranges from 0 (Visible) - 255 (Invisible).
-        /// </remarks>
-        public int InitialOpacity { get; set; } = 255;
-        
         /// <summary>
         ///     The step amount used to increase the opacity.
         /// </summary>
@@ -28,14 +20,6 @@ public sealed class ProjectileFadeIn : ProjectileComponent
     }
 
     public FadeData Data = new();
-
-    public override void SetDefaults(Projectile entity) {
-        if (!Enabled) {
-            return;
-        }
-
-        entity.alpha = Data.InitialOpacity;
-    }
 
     public override void AI(Projectile projectile) {
         if (!Enabled) {
