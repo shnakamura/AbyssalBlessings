@@ -1,3 +1,4 @@
+using AbyssalBlessings.Content.Rarities;
 using CalamityMod;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -30,6 +31,8 @@ public class PrimordialReaper : ModItem
 
         Item.shootSpeed = 12f;
         Item.shoot = ModContent.ProjectileType<Projectiles.Rogue.PrimordialReaper>();
+
+        Item.rare = ModContent.RarityType<Abyssal>();
     }
 
     public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI) {

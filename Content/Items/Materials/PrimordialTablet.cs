@@ -1,3 +1,4 @@
+using AbyssalBlessings.Content.Rarities;
 using Terraria;
 using Terraria.ModLoader;
 
@@ -10,5 +11,7 @@ public class PrimordialTablet : ModItem
 
         Item.width = 66;
         Item.height = 56;
+        
+        Item.rare = ModContent.RarityType<Abyssal>();
     }
 }

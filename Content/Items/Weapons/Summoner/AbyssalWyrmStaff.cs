@@ -1,3 +1,4 @@
+using AbyssalBlessings.Content.Rarities;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
@@ -11,6 +12,8 @@ public class AbyssalWyrmStaff : ModItem
 
         Item.width = 84;
         Item.height = 86;
+        
+        Item.rare = ModContent.RarityType<Abyssal>();
     }
 
     public override void ModifyShootStats(

@@ -49,7 +49,7 @@ public class Nahlyn : ModNPC
         bestiaryEntry.Info.AddRange(
             new IBestiaryInfoElement[] {
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Ocean,
-                new FlavorTextBestiaryInfoElement($"Mods.{nameof(AbyssalBlessings)}.Bestiary.Sailor")
+                new FlavorTextBestiaryInfoElement($"Mods.{nameof(AbyssalBlessings)}.Bestiary.Nahlyn")
             }
         );
     }
@@ -86,7 +86,7 @@ public class Nahlyn : ModNPC
 
     public override void AddShops() {
         new NPCShop(Type)
-            .AddWithCustomValue<ZephyrsHeart>(Item.buyPrice(1))
+            .AddWithCustomValue<ZephyrsHeart>(Item.buyPrice(platinum: 1))
             .AddWithCustomValue<SirensPearl>(Item.buyPrice(gold: 10))
             .AddWithCustomValue<AnechoicCoating>(Item.buyPrice(silver: 60))
             .AddWithCustomValue<SulphurskinPotion>(Item.buyPrice(silver: 60))

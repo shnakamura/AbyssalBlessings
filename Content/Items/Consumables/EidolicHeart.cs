@@ -1,5 +1,6 @@
 using AbyssalBlessings.Common.Players;
 using AbyssalBlessings.Content.Items.Materials;
+using AbyssalBlessings.Content.Rarities;
 using CalamityMod.CalPlayer;
 using CalamityMod.Items.Materials;
 using CalamityMod.Tiles.Furniture.CraftingStations;
@@ -31,6 +32,8 @@ public class EidolicHeart : ModItem
         Item.useTime = 15;
         Item.useAnimation = 20;
         Item.useStyle = ItemUseStyleID.HoldUp;
+        
+        Item.rare = ModContent.RarityType<Abyssal>();
     }
 
     public override bool CanUseItem(Player player) {

@@ -7,11 +7,6 @@ namespace AbyssalBlessings.Content.Projectiles.Rogue;
 
 public class PrimordialReaper : ModProjectile
 {
-    /// <summary>
-    ///     The projectile's minimum distance in pixel units required for attacking.
-    /// </summary>
-    public const float Distance = 16f * 16f;
-
     public override void SetDefaults() {
         Projectile.DamageType = ModContent.GetInstance<RogueDamageClass>();
 
@@ -33,5 +28,7 @@ public class PrimordialReaper : ModProjectile
         target.AddBuff(ModContent.BuffType<CrushDepth>(), 3 * 60);
     }
 
-    public override void AI() { }
+    public override void AI() {
+        
+    }
 }
