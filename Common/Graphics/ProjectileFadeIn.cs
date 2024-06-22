@@ -17,18 +17,18 @@ public sealed class ProjectileFadeIn : ProjectileComponent
         /// <remarks>
         ///     Ranges from 0 (Visible) - 255 (Invisible).
         /// </remarks>
-        public int Initial { get; set; } = 255;
+        public int InitialOpacity { get; set; } = 255;
         
         /// <summary>
         ///     The step amount used to increase the opacity.
         /// </summary>
-        public int Step { get; set; } = 5;
+        public int StepAmount { get; set; } = 5;
         
         /// <summary>
         ///     Whether the projectile is fading in or not.
         /// </summary>
         public bool Fading { get; set; }
-
+        
         public FadeData() { }
     }
 
@@ -39,7 +39,7 @@ public sealed class ProjectileFadeIn : ProjectileComponent
             return;
         }
 
-        entity.alpha = Data.Initial;
+        entity.alpha = Data.InitialOpacity;
     }
 
     public override void OnSpawn(Projectile projectile, IEntitySource source) {
@@ -63,7 +63,7 @@ public sealed class ProjectileFadeIn : ProjectileComponent
             return;
         }
 
-        projectile.alpha -= Data.Step;
+        projectile.alpha -= Data.StepAmount;
 
         if (projectile.alpha > 0) {
             return;

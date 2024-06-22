@@ -19,19 +19,23 @@ public class OceanBeam : ModProjectile
 
     public override void SetDefaults() {
         Projectile.DamageType = DamageClass.Melee;
+        
+        Projectile.tileCollide = false;
+        Projectile.friendly = true;
+        Projectile.usesLocalNPCImmunity = true;
+        
         Projectile.width = 14;
         Projectile.height = 14;
-        Projectile.friendly = true;
+        
         Projectile.extraUpdates = 2;
-        Projectile.usesLocalNPCImmunity = true;
-        Projectile.localNPCHitCooldown = 8;
         Projectile.penetrate = 3;
         Projectile.timeLeft = 600;
-        Projectile.tileCollide = false;
+        Projectile.localNPCHitCooldown = 8;
     }
 
     public override void AI() {
         Projectile.frameCounter++;
+        
         if (Projectile.frameCounter > 24) {
             Projectile.frame++;
             Projectile.frameCounter = 0;
@@ -42,19 +46,15 @@ public class OceanBeam : ModProjectile
         }
 
         Projectile.rotation = (float)Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
-        Projectile.ai[1] += 1f;
-        if (Projectile.ai[1] >= 60f) {
+        
+        if (Projectile.ai[1]++ >= 60f) {
             Projectile.tileCollide = true;
         }
     }
-
-    public override bool PreDraw(ref Color lightColor) {
-        CalamityUtils.DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], lightColor);
-        return false;
-    }
-
+    
     public override bool OnTileCollide(Vector2 oldVelocity) {
         Projectile.penetrate--;
+        
         if (Projectile.penetrate <= 0) {
             Projectile.Kill();
         }
@@ -67,28 +67,36 @@ public class OceanBeam : ModProjectile
                 Projectile.velocity.Y = 0f - oldVelocity.Y;
             }
 
-            SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
+            SoundEngine.PlaySound(in SoundID.Item10, Projectile.Center);
         }
 
         return false;
     }
 
+    public override bool PreDraw(ref Color lightColor) {
+        CalamityUtils.DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], lightColor);
+        
+        return false;
+    }
+
     public override void Kill(int timeLeft) {
-        SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
+        SoundEngine.PlaySound(in SoundID.Item10, Projectile.Center);
+        
         for (var i = 0; i < 3; i++) {
             Dust.NewDust(
                 Projectile.position + Projectile.velocity,
                 Projectile.width,
                 Projectile.height,
-                56,
+                DustID.BlueFairy,
                 Projectile.oldVelocity.X * 0.25f,
                 Projectile.oldVelocity.Y * 0.25f
             );
+            
             Dust.NewDust(
                 Projectile.position + Projectile.velocity,
                 Projectile.width,
                 Projectile.height,
-                245,
+                DustID.SilverCoin,
                 Projectile.oldVelocity.X * 0.25f,
                 Projectile.oldVelocity.Y * 0.25f
             );
