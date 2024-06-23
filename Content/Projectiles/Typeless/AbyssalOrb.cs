@@ -1,5 +1,6 @@
 using System;
 using AbyssalBlessings.Common.Graphics;
+using AbyssalBlessings.Common.Graphics.Components;
 using AbyssalBlessings.Common.Projectiles.Components;
 using CalamityMod.Buffs.DamageOverTime;
 using Microsoft.Xna.Framework;
@@ -69,10 +70,11 @@ public class AbyssalOrb : ModProjectile
         Projectile.rotation += Projectile.velocity.X * 0.05f;
 
         if (!Projectile.TryGetOwner(out _)) {
-            return;
+            UpdateDeath();
         }
-
-        UpdateMovement();
+        else {
+            UpdateMovement();
+        }
     }
 
     private void UpdateMovement() {
@@ -84,6 +86,7 @@ public class AbyssalOrb : ModProjectile
         var target = Projectile.FindTargetWithinRange(MinAttackDistance);
 
         if (target == null || !target.CanBeChasedBy()) {
+            UpdateDeath();
             return;
         }
 
@@ -93,5 +96,14 @@ public class AbyssalOrb : ModProjectile
         var velocity = direction * 12f + perpendicular;
 
         Projectile.velocity = Vector2.SmoothStep(Projectile.velocity, velocity, 0.2f);
+    }
+
+    private void UpdateDeath() {
+        if (Projectile.TryGetGlobalProjectile(out ProjectileFadeOut component)) {
+            component.Fade();
+        }
+        else {
+            Projectile.Kill();
+        }
     }
 }

@@ -26,7 +26,7 @@ public sealed class PlayerEidolicHearts : ModPlayer
 
     public override void SyncPlayer(int toWho, int fromWho, bool newPlayer) {
         var packet = Mod.GetPacket();
-        packet.Write(AbyssalBlessings.SyncStats);
+        packet.Write(AbyssalBlessings.SyncEidolicHeart);
         packet.Write((byte)Player.whoAmI);
         packet.Write((byte)EidolicHeartsConsumed);
         packet.Send();

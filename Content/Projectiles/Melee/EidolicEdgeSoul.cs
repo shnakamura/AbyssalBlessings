@@ -1,4 +1,5 @@
 using AbyssalBlessings.Common.Graphics;
+using AbyssalBlessings.Common.Graphics.Components;
 using AbyssalBlessings.Common.Projectiles.Components;
 using CalamityMod;
 using CalamityMod.Buffs.DamageOverTime;
@@ -70,10 +71,11 @@ public class EidolicEdgeSoul : ModProjectile
         Projectile.rotation += Projectile.velocity.X * 0.05f;
 
         if (!Projectile.TryGetOwner(out var player)) {
-            return;
+            UpdateDeath();
         }
-
-        UpdateMovement(player);
+        else {
+            UpdateMovement(player);
+        }
     }
 
     private void UpdateMovement(Player player) {
@@ -93,6 +95,15 @@ public class EidolicEdgeSoul : ModProjectile
             var direction = Projectile.DirectionTo(player.Center);
 
             Projectile.velocity = (Projectile.velocity * (inertia - 1f) + direction * speed) / inertia;
+        }
+    }
+    
+    private void UpdateDeath() {
+        if (Projectile.TryGetGlobalProjectile(out ProjectileFadeOut component)) {
+            component.Fade();
+        }
+        else {
+            Projectile.Kill();
         }
     }
 }

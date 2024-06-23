@@ -1,3 +1,5 @@
+using AbyssalBlessings.Common.Graphics.Components;
+using AbyssalBlessings.Common.Projectiles.Components;
 using AbyssalBlessings.Content.Projectiles.Typeless;
 using CalamityMod.Buffs.DamageOverTime;
 using Microsoft.Xna.Framework;
@@ -33,6 +35,8 @@ public class AbyssalThrow : ModProjectile
         Projectile.penetrate = -1;
 
         Projectile.aiStyle = ProjAIStyleID.Yoyo;
+
+        Projectile.TryEnableComponent<ProjectileFadeIn>(c => c.Data.StepAmount = 15);
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {

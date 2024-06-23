@@ -2,6 +2,7 @@ using System.IO;
 using AbyssalBlessings.Common.Players;
 using Terraria;
 using Terraria.ID;
+using AbyssalBlessings.Content.Items.Consumables;
 using Terraria.ModLoader;
 
 namespace AbyssalBlessings;
@@ -9,15 +10,15 @@ namespace AbyssalBlessings;
 public sealed class AbyssalBlessings : Mod
 {
     /// <summary>
-    ///     The packet Id for syncing player stats.
+    ///     The packet Id for syncing <see cref="EidolicHeart"/> stat changes of a <see cref="Player"/>.
     /// </summary>
-    public const byte SyncStats = 0;
+    public const byte SyncEidolicHeart = 0;
 
     public override void HandlePacket(BinaryReader reader, int whoAmI) {
         var id = reader.ReadByte();
 
         switch (id) {
-            case SyncStats:
+            case SyncEidolicHeart:
                 var index = reader.ReadByte();
                 var amount = reader.ReadByte();
 
