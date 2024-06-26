@@ -120,6 +120,16 @@ Items: {
 		DisplayName: Mariana
 		Tooltip: Tropical and deadly\nEnemies explode into water orbs on hi
 	}
+
+	SilvaRelic: {
+		DisplayName: Silva Relic
+		Tooltip: ""
+	}
+
+	SilvaTrophy: {
+		DisplayName: Silva Trophy
+		Tooltip: ""
+	}
 }
 
 Projectiles: {

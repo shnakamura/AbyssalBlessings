@@ -19,14 +19,14 @@ public class OceanBeam : ModProjectile
 
     public override void SetDefaults() {
         Projectile.DamageType = DamageClass.Melee;
-        
+
         Projectile.tileCollide = false;
         Projectile.friendly = true;
         Projectile.usesLocalNPCImmunity = true;
-        
+
         Projectile.width = 14;
         Projectile.height = 14;
-        
+
         Projectile.extraUpdates = 2;
         Projectile.penetrate = 3;
         Projectile.timeLeft = 600;
@@ -35,7 +35,7 @@ public class OceanBeam : ModProjectile
 
     public override void AI() {
         Projectile.frameCounter++;
-        
+
         if (Projectile.frameCounter > 24) {
             Projectile.frame++;
             Projectile.frameCounter = 0;
@@ -46,15 +46,15 @@ public class OceanBeam : ModProjectile
         }
 
         Projectile.rotation = (float)Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
-        
+
         if (Projectile.ai[1]++ >= 60f) {
             Projectile.tileCollide = true;
         }
     }
-    
+
     public override bool OnTileCollide(Vector2 oldVelocity) {
         Projectile.penetrate--;
-        
+
         if (Projectile.penetrate <= 0) {
             Projectile.Kill();
         }
@@ -75,13 +75,13 @@ public class OceanBeam : ModProjectile
 
     public override bool PreDraw(ref Color lightColor) {
         CalamityUtils.DrawAfterimagesCentered(Projectile, ProjectileID.Sets.TrailingMode[Projectile.type], lightColor);
-        
+
         return false;
     }
 
     public override void Kill(int timeLeft) {
         SoundEngine.PlaySound(in SoundID.Item10, Projectile.Center);
-        
+
         for (var i = 0; i < 3; i++) {
             Dust.NewDust(
                 Projectile.position + Projectile.velocity,
@@ -91,7 +91,7 @@ public class OceanBeam : ModProjectile
                 Projectile.oldVelocity.X * 0.25f,
                 Projectile.oldVelocity.Y * 0.25f
             );
-            
+
             Dust.NewDust(
                 Projectile.position + Projectile.velocity,
                 Projectile.width,

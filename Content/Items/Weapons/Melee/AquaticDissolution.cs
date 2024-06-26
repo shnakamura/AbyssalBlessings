@@ -34,7 +34,7 @@ public class AquaticDissolution : ModItem
         Item.rare = ModContent.RarityType<Turquoise>();
         Item.value = CalamityGlobalItem.RarityTurquoiseBuyPrice;
     }
-    
+
     public override void MeleeEffects(Player player, Rectangle hitbox) {
         if (!Main.rand.NextBool(5)) {
             return;

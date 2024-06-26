@@ -1,11 +1,11 @@
 using System;
-using AbyssalBlessings.Common.Graphics;
-using AbyssalBlessings.Common.Graphics.Components;
-using AbyssalBlessings.Common.Projectiles.Components;
+using AbyssalBlessings.Utilities.Extensions;
 using CalamityMod.Buffs.DamageOverTime;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace AbyssalBlessings.Content.Projectiles.Typeless;
@@ -33,11 +33,16 @@ public class AbyssalOrb : ModProjectile
     /// <summary>
     ///     The sound played when the projectile hits an enemy.
     /// </summary>
-    public static readonly SoundStyle HitSound = new($"{nameof(AbyssalBlessings)}/Assets/Sounds/Custom/AbyssHit", 4) {
+    public static readonly SoundStyle HitSound = new($"{nameof(AbyssalBlessings)}/Assets/Sounds/Custom/AbyssalOrbHit", 4) {
         PitchVariance = 0.5f,
-        MaxInstances = 3,
-        Volume = 0.7f
+        MaxInstances = 5,
+        Volume = 0.75f
     };
+
+    public override void SetStaticDefaults() {
+        ProjectileID.Sets.TrailingMode[Type] = 2;
+        ProjectileID.Sets.TrailCacheLength[Type] = 10;
+    }
 
     public override void SetDefaults() {
         Projectile.DamageType = DamageClass.Generic;
@@ -51,32 +56,91 @@ public class AbyssalOrb : ModProjectile
 
         Projectile.alpha = 255;
         Projectile.timeLeft = Lifespan;
-        
-        Projectile.TryEnableComponent<ProjectileFadeIn>();
-        Projectile.TryEnableComponent<ProjectileFadeOut>();
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
+        SoundEngine.PlaySound(in HitSound, target.Center);
+        
         target.AddBuff(ModContent.BuffType<CrushDepth>(), 3 * 60);
     }
 
     public override void OnHitPlayer(Player target, Player.HurtInfo info) {
+        SoundEngine.PlaySound(in HitSound, target.Center);
+
         target.AddBuff(ModContent.BuffType<CrushDepth>(), 3 * 60);
     }
 
     public override void AI() {
-        Projectile.alpha = (int)MathHelper.Clamp(Projectile.alpha, 0, 255);
-
         Projectile.rotation += Projectile.velocity.X * 0.05f;
 
-        if (!Projectile.TryGetOwner(out _)) {
+        if (!Projectile.HasValidOwner()) {
             UpdateDeath();
+            return;
         }
-        else {
-            UpdateMovement();
-        }
+        
+        UpdateOpacity();
+        UpdateMovement();
     }
 
+    public override bool PreDraw(ref Color lightColor) {
+        var afterimage = ModContent.Request<Texture2D>(Texture + "_Afterimage").Value;
+
+        var length = ProjectileID.Sets.TrailCacheLength[Type];
+        
+        for (var i = 0; i < length; i += 2) {
+            var progress = 1f - i / (float)length;
+            
+            Main.EntitySpriteDraw(
+                afterimage,
+                Projectile.GetOldDrawPosition(i),
+                Projectile.GetDrawFrame(),
+                Projectile.GetAlpha(Color.White) * progress,
+                Projectile.oldRot[i],
+                afterimage.Size() / 2f + Projectile.GetDrawOriginOffset(),
+                Projectile.scale,
+                SpriteEffects.None
+            );
+        }
+
+        var texture = ModContent.Request<Texture2D>(Texture).Value;
+        
+        Main.EntitySpriteDraw(
+            texture,
+            Projectile.GetDrawPosition(),
+            Projectile.GetDrawFrame(),
+            Projectile.GetAlpha(Color.White),
+            Projectile.rotation,
+            texture.Size() / 2f + Projectile.GetDrawOriginOffset(),
+            Projectile.scale,
+            SpriteEffects.None
+        );
+        
+        return false;
+    }
+
+    private void UpdateOpacity() {
+        if (Projectile.timeLeft < 255 / 5) {
+            Projectile.alpha += 5;
+        }
+        else {
+            Projectile.alpha -= 5;
+        }
+
+        Projectile.alpha = (int)MathHelper.Clamp(Projectile.alpha, 0, 255);
+    }
+
+    private void UpdateDeath() {
+        Projectile.velocity *= 0.9f;
+
+        Projectile.alpha += 5;
+
+        if (Projectile.alpha < 255) {
+            return;
+        }
+        
+        Projectile.Kill();
+    }
+    
     private void UpdateMovement() {
         if (Projectile.timeLeft > Lifespan - Charge) {
             Projectile.velocity *= 0.85f;
@@ -96,14 +160,5 @@ public class AbyssalOrb : ModProjectile
         var velocity = direction * 12f + perpendicular;
 
         Projectile.velocity = Vector2.SmoothStep(Projectile.velocity, velocity, 0.2f);
-    }
-
-    private void UpdateDeath() {
-        if (Projectile.TryGetGlobalProjectile(out ProjectileFadeOut component)) {
-            component.Fade();
-        }
-        else {
-            Projectile.Kill();
-        }
     }
 }

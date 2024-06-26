@@ -32,7 +32,7 @@ public class EidolicHeart : ModItem
         Item.useTime = 15;
         Item.useAnimation = 20;
         Item.useStyle = ItemUseStyleID.HoldUp;
-        
+
         Item.rare = ModContent.RarityType<Abyssal>();
     }
 

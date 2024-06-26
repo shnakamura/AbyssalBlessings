@@ -1,4 +1,3 @@
-using Terraria.DataStructures;
 using Terraria.ModLoader;
 
 namespace AbyssalBlessings.Content.NPCs.Bosses.Silva;
@@ -14,12 +13,12 @@ public sealed class Silva : ModNPC
 
         NPC.lifeMax = 50000;
         NPC.defense = 50;
-        
+
         NPC.width = 30;
         NPC.height = 50;
 
         NPC.knockBackResist = 0f;
-        
+
         Music = MusicLoader.GetMusicSlot(Mod, "Assets/Sounds/Music/Silva");
         SceneEffectPriority = SceneEffectPriority.BossHigh;
     }

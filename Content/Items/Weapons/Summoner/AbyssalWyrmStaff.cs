@@ -12,7 +12,7 @@ public class AbyssalWyrmStaff : ModItem
 
         Item.width = 84;
         Item.height = 86;
-        
+
         Item.rare = ModContent.RarityType<Abyssal>();
     }
 

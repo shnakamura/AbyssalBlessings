@@ -1,8 +1,6 @@
-using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -15,7 +13,7 @@ public class ZephyrSquid : ModProjectile
     ///     The projectile's minimum distance in pixel units required for teleporting to the owner.
     /// </summary>
     public const float MinTeleportDistance = 100f * 16f;
-    
+
     private Vector2 scale;
 
     public override void SetStaticDefaults() {
@@ -29,7 +27,7 @@ public class ZephyrSquid : ModProjectile
 
         Projectile.width = 30;
         Projectile.height = 30;
-        
+
         Projectile.alpha = 255;
 
         Projectile.penetrate = -1;
@@ -41,18 +39,18 @@ public class ZephyrSquid : ModProjectile
         scale = Vector2.SmoothStep(scale, Vector2.One, 0.2f);
 
         Projectile.rotation = Projectile.velocity.X * 0.1f;
-        
+
         FadeIn();
 
         if (!Projectile.TryGetOwner(out var owner) || !owner.HasBuff<Buffs.ZephyrSquid>()) {
             FadeOut();
             return;
         }
-        
+
         UpdateMovement(owner);
 
         Projectile.timeLeft = 2;
-        
+
         if (Projectile.DistanceSQ(owner.Center) <= MinTeleportDistance * MinTeleportDistance) {
             return;
         }
@@ -87,7 +85,7 @@ public class ZephyrSquid : ModProjectile
         for (var i = 0; i < count; i++) {
             var velocity = new Vector2(i - count / 2f, -6f);
             var dust = Dust.NewDustPerfect(Projectile.Center, DustID.Water, velocity);
-            
+
             dust.noGravity = true;
             dust.scale = Main.rand.NextFloat(1.4f, 1.8f);
             dust.alpha = 100;
@@ -95,7 +93,7 @@ public class ZephyrSquid : ModProjectile
 
         scale = new Vector2(scale.X * 2f, scale.Y / 4f);
     }
-    
+
     private void FadeIn() {
         if (Projectile.alpha <= 0) {
             return;
@@ -117,13 +115,13 @@ public class ZephyrSquid : ModProjectile
     private void UpdateMovement(Player owner) {
         var position = owner.Center - new Vector2(4f * 16f * owner.direction, 2f * 16f);
         var direction = Projectile.DirectionTo(position);
-        
+
         var speed = 8f;
         var inertia = 40f;
 
         var difference = position - Projectile.Center;
         var length = difference.LengthSquared();
-        
+
         var threshold = 32f;
 
         if (length > threshold * threshold) {

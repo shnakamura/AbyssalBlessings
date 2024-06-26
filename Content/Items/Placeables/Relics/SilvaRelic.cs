@@ -13,7 +13,7 @@ public class SilvaRelic : ModItem
 
         Item.width = 30;
         Item.height = 50;
-        
+
         Item.rare = ItemRarityID.Master;
         Item.value = Item.buyPrice(gold: 5);
     }

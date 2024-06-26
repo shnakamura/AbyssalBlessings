@@ -1,8 +1,8 @@
-using AbyssalBlessings.Common.Graphics.Components;
-using AbyssalBlessings.Common.Projectiles.Components;
 using AbyssalBlessings.Content.Projectiles.Typeless;
+using AbyssalBlessings.Utilities.Extensions;
 using CalamityMod.Buffs.DamageOverTime;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -20,6 +20,9 @@ public class AbyssalThrow : ModProjectile
         ProjectileID.Sets.YoyosLifeTimeMultiplier[Type] = -1f;
         ProjectileID.Sets.YoyosMaximumRange[Type] = 400f;
         ProjectileID.Sets.YoyosTopSpeed[Type] = 18f;
+        
+        ProjectileID.Sets.TrailingMode[Type] = 2;
+        ProjectileID.Sets.TrailCacheLength[Type] = 10;
     }
 
     public override void SetDefaults() {
@@ -35,8 +38,6 @@ public class AbyssalThrow : ModProjectile
         Projectile.penetrate = -1;
 
         Projectile.aiStyle = ProjAIStyleID.Yoyo;
-
-        Projectile.TryEnableComponent<ProjectileFadeIn>(c => c.Data.StepAmount = 15);
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
@@ -67,5 +68,43 @@ public class AbyssalThrow : ModProjectile
         );
 
         Projectile.netUpdate = true;
+    }
+
+    public override bool PreDraw(ref Color lightColor) {
+        var afterimage = ModContent.Request<Texture2D>(Texture + "_Afterimage").Value;
+
+        var length = ProjectileID.Sets.TrailCacheLength[Type];
+        
+        for (var i = 0; i < length; i += 2) {
+            var progress = 1f - i / (float)length;
+            
+            var color = Color.Lerp(new Color(255, 244, 0), new Color(93, 203, 243), progress);
+            
+            Main.EntitySpriteDraw(
+                afterimage,
+                Projectile.GetOldDrawPosition(i),
+                Projectile.GetDrawFrame(),
+                Projectile.GetAlpha(color) * progress,
+                Projectile.oldRot[i],
+                afterimage.Size() / 2f + Projectile.GetDrawOriginOffset(),
+                Projectile.scale,
+                SpriteEffects.None
+            );
+        }
+
+        var texture = ModContent.Request<Texture2D>(Texture).Value;
+        
+        Main.EntitySpriteDraw(
+            texture,
+            Projectile.GetDrawPosition(),
+            Projectile.GetDrawFrame(),
+            Projectile.GetAlpha(Color.White),
+            Projectile.rotation,
+            texture.Size() / 2f + Projectile.GetDrawOriginOffset(),
+            Projectile.scale,
+            SpriteEffects.None
+        );
+        
+        return false;
     }
 }

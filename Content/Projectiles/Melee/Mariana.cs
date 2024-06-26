@@ -1,4 +1,3 @@
-using System;
 using CalamityMod;
 using Microsoft.Xna.Framework;
 using Terraria;
@@ -32,7 +31,7 @@ public class Mariana : ModProjectile
         if (Projectile.timeLeft > 150) {
             return;
         }
-        
+
         CalamityUtils.HomeInOnNPC(Projectile, false, 600f, 9f, 20f);
     }
 
@@ -40,7 +39,7 @@ public class Mariana : ModProjectile
         if (Projectile.timeLeft < 85) {
             var value = (byte)(Projectile.timeLeft * 3);
             var alpha = (byte)(100f * (value / 255f));
-            
+
             return new Color(value, value, value, alpha);
         }
 
@@ -49,15 +48,15 @@ public class Mariana : ModProjectile
 
     public override bool OnTileCollide(Vector2 oldVelocity) {
         SoundEngine.PlaySound(in SoundID.Item10, Projectile.Center);
-        
+
         for (var i = 0; i < 12; i++) {
             var offset = Vector2.UnitX * (0f - Projectile.width) / 2f;
-            
+
             offset += -Vector2.UnitY.RotatedBy(i * MathHelper.Pi / 6f) * new Vector2(8f, 16f);
             offset = offset.RotatedBy(Projectile.rotation - MathHelper.PiOver2);
-            
+
             var dust = Dust.NewDustDirect(Projectile.Center, 0, 0, DustID.FireworkFountain_Blue, 0f, 0f, 160);
-            
+
             dust.scale = 1.1f;
             dust.noGravity = true;
             dust.position = Projectile.Center + offset;
