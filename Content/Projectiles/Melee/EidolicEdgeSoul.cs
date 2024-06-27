@@ -1,3 +1,4 @@
+using AbyssalBlessings.Common.Graphics;
 using AbyssalBlessings.Utilities.Extensions;
 using CalamityMod;
 using CalamityMod.Buffs.DamageOverTime;
@@ -6,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
+using Terraria.Graphics;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -103,6 +105,8 @@ public class EidolicEdgeSoul : ModProjectile
     }
 
     public override bool PreDraw(ref Color lightColor) {
+        ModContent.GetInstance<MeshSystem>().Meshes.Add(new TestTrail(Projectile));
+        
         var bloom = ModContent.Request<Texture2D>($"{nameof(AbyssalBlessings)}/Assets/Textures/Effects/Bloom").Value;
         
         Main.EntitySpriteDraw(

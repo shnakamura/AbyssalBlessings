@@ -3,9 +3,6 @@ using Terraria.ModLoader;
 
 namespace AbyssalBlessings.Common.Audio;
 
-/// <summary>
-///     Provides an audio filter contract used in <see cref="AudioSystem" />.
-/// </summary>
 [Autoload(Side = ModSide.Client)]
 public interface IAudioFilter : ILoadable
 {
@@ -18,7 +15,7 @@ public interface IAudioFilter : ILoadable
     ///     Applies the audio filter to a given sound effect instance.
     /// </summary>
     /// <remarks>
-    ///     This automatically checks for <see cref="Enabled" /> before applying the audio filter.
+    ///     <see cref="Enabled" /> will be automatically checked by the <see cref="AudioSystem"/> before applying the audio filter.
     /// </remarks>
     /// <param name="instance">The sound effect instance to apply.</param>
     /// <param name="parameters">The sound parameters to apply.</param>

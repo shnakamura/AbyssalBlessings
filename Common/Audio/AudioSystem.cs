@@ -26,7 +26,7 @@ public sealed class AudioSystem : ModSystem
     private static readonly List<ActiveSound> Sounds = new();
     private static readonly List<AudioModifier> Modifiers = new();
 
-    private static AudioParameters parameters;
+    public static AudioParameters Parameters { get; private set; }
 
     public override void Load() {
         if (!SoundEngine.IsAudioSupported) {
@@ -94,7 +94,7 @@ public sealed class AudioSystem : ModSystem
             modifier.Modifier(ref newParameters, modifier.TimeLeft / (float)modifier.TimeMax);
         }
 
-        parameters = newParameters;
+        Parameters = newParameters;
     }
 
     private static void UpdateSounds() {
@@ -106,7 +106,7 @@ public sealed class AudioSystem : ModSystem
                 continue;
             }
 
-            ApplyParameters(sound.Sound, parameters);
+            ApplyParameters(sound.Sound, Parameters);
         }
     }
 

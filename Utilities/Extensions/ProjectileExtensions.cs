@@ -48,7 +48,7 @@ public static class ProjectileExtensions
     /// </summary>
     /// <remarks>
     ///     This is only applied to modded projectiles to ensure compatibility. Precisely, this returns a <see cref="Vector2" /> composed by
-    ///     <see crepf="Terraria.ModLoader.ModPprojectile.DrawOriginOffsetX" /> and <see cref="Terraria.ModLoader.ModProjectile.DrawOriginOffsetY" />.
+    ///     <see crepf="Terraria.ModLoader.ModPpprojectile.DrawOriginOffsetX" /> and <see cref="Terraria.ModLoader.ModProjectile.DrawOriginOffsetY" />.
     /// </remarks>
     /// <param name="projectile">The projectile instance to get the origin offset from.</param>
     /// <returns>The projectile's origin offset.</returns>
