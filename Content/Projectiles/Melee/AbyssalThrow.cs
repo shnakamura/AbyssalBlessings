@@ -1,4 +1,5 @@
 using AbyssalBlessings.Common.Graphics;
+using AbyssalBlessings.Common.Graphics.Renderers;
 using AbyssalBlessings.Common.Graphics.Trails;
 using AbyssalBlessings.Content.Projectiles.Typeless;
 using AbyssalBlessings.Utilities.Extensions;
@@ -110,7 +111,7 @@ public class AbyssalThrow : ModProjectile
                     Projectile, 
                     new Color(93, 203, 243),
                     new Color(72, 135, 205),
-                    static progress => 20f * progress
+                    static progress => 64f * progress
                 );
     
                 trail.Draw();

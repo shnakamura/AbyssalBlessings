@@ -1,5 +1,6 @@
 using System;
 using AbyssalBlessings.Common.Graphics;
+using AbyssalBlessings.Common.Graphics.Renderers;
 using AbyssalBlessings.Common.Graphics.Trails;
 using AbyssalBlessings.Utilities.Extensions;
 using CalamityMod.Buffs.DamageOverTime;

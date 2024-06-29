@@ -3,12 +3,9 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
-using Terraria.Graphics;
-using Terraria.Graphics.Shaders;
-using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace AbyssalBlessings.Common.Graphics;
+namespace AbyssalBlessings.Common.Graphics.Renderers;
 
 /// <summary>
 ///     Handles registration and rendering of pixellated content.

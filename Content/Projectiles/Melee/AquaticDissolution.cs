@@ -79,7 +79,7 @@ public class AquaticDissolution : ModProjectile
         return false;
     }
 
-    public override void Kill(int timeLeft) {
+    public override void OnKill(int timeLeft) {
         SoundEngine.PlaySound(in SoundID.Item10, Projectile.Center);
 
         for (var i = 0; i < 3; i++) {

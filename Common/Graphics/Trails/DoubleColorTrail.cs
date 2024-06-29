@@ -51,8 +51,8 @@ public struct DoubleColorTrail : ITrail
         Strip.PrepareStripWithProceduralPadding(
             Projectile.oldPos,
             Projectile.oldRot,
-            StripColor,
-            StripWidth,
+            GetStripColor,
+            GetStripWidth,
             -Main.screenPosition + Projectile.Size / 2f
         );
         
@@ -61,21 +61,21 @@ public struct DoubleColorTrail : ITrail
         Main.pixelShader.CurrentTechnique.Passes[0].Apply();
     }
     
-    private Color StripColor(float progress) {
-        var alpha = progress;
-
-        var color = Color.Lerp(
+    private Color GetStripColor(float progress) {
+        var interpolation = Color.Lerp(
             Start,
             End,
             progress
         );
+
+        var color = Projectile.GetAlpha(ColorCallback?.Invoke(progress) ?? interpolation * progress);
         
-        return Projectile.GetAlpha(ColorCallback?.Invoke(progress) ?? color * alpha);
+        return color;
     }
 
-    private float StripWidth(float progress) {
+    private float GetStripWidth(float progress) {
         var width = WidthCallback?.Invoke(progress) ?? progress;
-
+        
         return width;
     }
 }
