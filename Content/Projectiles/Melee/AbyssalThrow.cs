@@ -1,7 +1,9 @@
 using AbyssalBlessings.Common.Graphics;
+using AbyssalBlessings.Common.Graphics.Trails;
 using AbyssalBlessings.Content.Projectiles.Typeless;
 using AbyssalBlessings.Utilities.Extensions;
 using CalamityMod.Buffs.DamageOverTime;
+using CalamityMod.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -23,7 +25,7 @@ public class AbyssalThrow : ModProjectile
         ProjectileID.Sets.YoyosTopSpeed[Type] = 18f;
         
         ProjectileID.Sets.TrailingMode[Type] = 3;
-        ProjectileID.Sets.TrailCacheLength[Type] = 30;
+        ProjectileID.Sets.TrailCacheLength[Type] = 25;
     }
 
     public override void SetDefaults() {
@@ -42,10 +44,14 @@ public class AbyssalThrow : ModProjectile
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
+        TriggerEffects();
+        
         target.AddBuff(ModContent.BuffType<CrushDepth>(), 3 * 60);
     }
 
     public override void OnHitPlayer(Player target, Player.HurtInfo info) {
+        TriggerEffects();
+        
         target.AddBuff(ModContent.BuffType<CrushDepth>(), 3 * 60);
     }
 
@@ -72,7 +78,18 @@ public class AbyssalThrow : ModProjectile
     }
 
     public override bool PreDraw(ref Color lightColor) {
-        ModContent.GetInstance<MeshSystem>().Meshes.Add(new TestTrail(Projectile));
+        var bloom = ModContent.Request<Texture2D>($"{nameof(AbyssalBlessings)}/Assets/Textures/Effects/Bloom").Value;
+        
+        Main.EntitySpriteDraw(
+            bloom,
+            Projectile.GetDrawPosition(),
+            null,
+            Projectile.GetAlpha(new Color(93, 203, 243, 0)) * 0.75f,
+            Projectile.rotation,
+            bloom.Size() / 2f + Projectile.GetDrawOriginOffset(),
+            Projectile.scale * 0.7f,
+            SpriteEffects.None
+        );
 
         var texture = ModContent.Request<Texture2D>(Texture).Value;
         
@@ -87,6 +104,34 @@ public class AbyssalThrow : ModProjectile
             SpriteEffects.None
         );
         
+        PixellatedRenderer.Queue(
+            () => {
+                var trail = new DoubleColorTrail(
+                    Projectile, 
+                    new Color(93, 203, 243),
+                    new Color(72, 135, 205),
+                    static progress => 20f * progress
+                );
+    
+                trail.Draw();
+            }
+        );
+        
         return false;
+    }
+    
+    private void TriggerEffects() {
+        for (var i = 0; i < 3; i++) {
+            var particle = new GlowOrbParticle(
+                Projectile.Center,
+                Main.rand.NextVector2Circular(2f, 2f),
+                false,
+                60,
+                0.75f,
+                Projectile.GetAlpha(new Color(93, 203, 243))
+            );
+
+            GeneralParticleHandler.SpawnParticle(particle);
+        }
     }
 }

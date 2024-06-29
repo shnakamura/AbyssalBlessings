@@ -1,4 +1,5 @@
 using AbyssalBlessings.Common.Graphics;
+using AbyssalBlessings.Common.Graphics.Trails;
 using AbyssalBlessings.Utilities.Extensions;
 using CalamityMod;
 using CalamityMod.Buffs.DamageOverTime;
@@ -53,8 +54,8 @@ public class EidolicEdgeSoul : ModProjectile
     public ref float InertiaModifier => ref Projectile.ai[1];
     
     public override void SetStaticDefaults() {
-        ProjectileID.Sets.TrailingMode[Type] = 2;
-        ProjectileID.Sets.TrailCacheLength[Type] = 10;
+        ProjectileID.Sets.TrailingMode[Type] = 3;
+        ProjectileID.Sets.TrailCacheLength[Type] = 25;
     }
 
     public override void SetDefaults() {
@@ -105,41 +106,18 @@ public class EidolicEdgeSoul : ModProjectile
     }
 
     public override bool PreDraw(ref Color lightColor) {
-        ModContent.GetInstance<MeshSystem>().Meshes.Add(new TestTrail(Projectile));
-        
         var bloom = ModContent.Request<Texture2D>($"{nameof(AbyssalBlessings)}/Assets/Textures/Effects/Bloom").Value;
         
         Main.EntitySpriteDraw(
             bloom,
             Projectile.GetDrawPosition(),
-            Projectile.GetDrawFrame(),
+            null,
             Projectile.GetAlpha(new Color(93, 203, 243, 0)) * 0.75f,
             Projectile.rotation,
             bloom.Size() / 2f + Projectile.GetDrawOriginOffset(),
-            Projectile.scale / 2f,
+            Projectile.scale,
             SpriteEffects.None
         );
-        
-        var afterimage = ModContent.Request<Texture2D>(Texture + "_Afterimage").Value;
-
-        var length = ProjectileID.Sets.TrailCacheLength[Type];
-        
-        for (var i = 0; i < length; i += 2) {
-            var progress = 1f - i / (float)length;
-            
-            var color = Color.Lerp(new Color(255, 244, 0), new Color(93, 203, 243), progress);
-            
-            Main.EntitySpriteDraw(
-                afterimage,
-                Projectile.GetOldDrawPosition(i),
-                Projectile.GetDrawFrame(),
-                Projectile.GetAlpha(color) * progress,
-                Projectile.oldRot[i],
-                afterimage.Size() / 2f + Projectile.GetDrawOriginOffset(),
-                Projectile.scale,
-                SpriteEffects.None
-            );
-        }
 
         var texture = ModContent.Request<Texture2D>(Texture).Value;
         
@@ -154,11 +132,35 @@ public class EidolicEdgeSoul : ModProjectile
             SpriteEffects.None
         );
         
+        PixellatedRenderer.Queue(
+            () => {
+                var trail = new DoubleColorTrail(
+                    Projectile, 
+                    new Color(93, 203, 243),
+                    new Color(72, 135, 205),
+                    static progress => 32f * progress
+                );
+    
+                trail.Draw();
+            }
+        );
+
         return false;
     }
 
     private void TriggerEffects() {
+        for (var i = 0; i < 5; i++) {
+            var particle = new GlowOrbParticle(
+                Projectile.Center,
+                Main.rand.NextVector2Circular(2f, 2f) * 2f,
+                false,
+                60,
+                1f,
+                Projectile.GetAlpha(new Color(93, 203, 243))
+            );
 
+            GeneralParticleHandler.SpawnParticle(particle);
+        }
     }
 
     private void UpdateOpacity() {

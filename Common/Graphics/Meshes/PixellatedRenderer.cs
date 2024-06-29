@@ -1,30 +1,31 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Graphics;
+using Terraria.Graphics.Shaders;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace AbyssalBlessings.Common.Graphics;
 
 /// <summary>
-///     Handles the registration and rendering of <see cref="IMesh"/> instances.
+///     Handles registration and rendering of pixellated content.
 /// </summary>
 [Autoload(Side = ModSide.Client)]
-public sealed class MeshSystem : ModSystem
+public sealed class PixellatedRenderer : ModSystem
 {
+    private static List<Action> Actions { get; } = new();
+    
     /// <summary>
-    ///     The meshes currently queued for rendering.
-    /// </summary>
-    public List<IMesh> Meshes { get; } = new();
-
-    /// <summary>
-    ///     The render target used for rendering meshes.
+    ///     The render target used for drawing pixellated content.
     /// </summary>
     /// <remarks>
-    ///     This is mainly used for applying pixellation effects on meshes.
+    ///     This has half the screen size and is rendered at full
+    ///     screen size, which results in the pixellated effect.
     /// </remarks>
-    public RenderTarget2D Target { get; private set; }
+    public static RenderTarget2D Target { get; private set; }
 
     public override void Load() {
         Main.RunOnMainThread(
@@ -46,10 +47,12 @@ public sealed class MeshSystem : ModSystem
 
             Main.spriteBatch.Begin(
                 SpriteSortMode.Immediate,
-                BlendState.AlphaBlend,
+                BlendState.NonPremultiplied,
                 SamplerState.PointWrap,
                 DepthStencilState.None,
-                RasterizerState.CullNone
+                RasterizerState.CullNone,
+                null,
+                Main.GameViewMatrix.TransformationMatrix
             );
 
             Main.spriteBatch.Draw(Target, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.White);
@@ -57,57 +60,55 @@ public sealed class MeshSystem : ModSystem
             Main.spriteBatch.End();
         };
 
-        Main.OnPreDraw += DrawMeshes;
         Main.OnResolutionChanged += ResizeTarget;
     }
 
     public override void Unload() {
-        Main.OnPreDraw -= DrawMeshes;
         Main.OnResolutionChanged -= ResizeTarget;
         
         Main.RunOnMainThread(() => Target?.Dispose());
     }
 
-    private void ResizeTarget(Vector2 size) {
-        Main.RunOnMainThread(
-            () => {
-                Target.Dispose();
-
-                Target = new(
-                    Main.graphics.GraphicsDevice,
-                    (int)(size.X / 2),
-                    (int)(size.Y / 2)
-                );
-            }
-        );
-    }
-
-    private void DrawMeshes(GameTime gameTime) {
+    public override void PostUpdateEverything() {
         var device = Main.graphics.GraphicsDevice;
 
         var bindings = device.GetRenderTargets();
 
         device.SetRenderTarget(Target);
         device.Clear(Color.Transparent);
+        
+        Main.spriteBatch.Begin(SpriteSortMode.Texture, BlendState.NonPremultiplied);
 
-        Main.spriteBatch.Begin(
-            SpriteSortMode.Immediate,
-            BlendState.AlphaBlend,
-            SamplerState.PointClamp,
-            DepthStencilState.None,
-            RasterizerState.CullNone,
-            null,
-            Main.GameViewMatrix.TransformationMatrix
-        );
-
-        foreach (var mesh in Meshes) {
-            mesh.Draw();
+        foreach (var action in Actions) {
+            action?.Invoke();
         }
         
         Main.spriteBatch.End();
-
+        
         device.SetRenderTargets(bindings);
 
-        Meshes.Clear();
+        Actions.Clear();
+    }
+    
+    /// <summary>
+    ///     Queues an action to be executed during the next rendering update.
+    /// </summary>
+    /// <param name="action">The action to queue.</param>
+    public static void Queue(Action action) {
+        Actions.Add(action);
+    }
+
+    private static void ResizeTarget(Vector2 size) {
+        Main.RunOnMainThread(
+            () => {
+                Target?.Dispose();
+
+                Target = new(
+                    Main.graphics.GraphicsDevice,
+                    (int)(size.X / 2f),
+                    (int)(size.Y / 2f)
+                );
+            }
+        );
     }
 }

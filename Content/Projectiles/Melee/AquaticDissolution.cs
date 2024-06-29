@@ -8,7 +8,7 @@ using Terraria.ModLoader;
 
 namespace AbyssalBlessings.Content.Projectiles.Melee;
 
-public class OceanBeam : ModProjectile
+public class AquaticDissolution : ModProjectile
 {
     public override void SetStaticDefaults() {
         Main.projFrames[Projectile.type] = 4;

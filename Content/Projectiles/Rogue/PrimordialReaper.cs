@@ -12,14 +12,14 @@ namespace AbyssalBlessings.Content.Projectiles.Rogue;
 public class PrimordialReaper : ModProjectile
 {
     public override void SetStaticDefaults() {
-        ProjectileID.Sets.TrailingMode[Type] = 2;
-        ProjectileID.Sets.TrailCacheLength[Type] = 10;
+        ProjectileID.Sets.TrailingMode[Type] = 3;
+        ProjectileID.Sets.TrailCacheLength[Type] = 25;
     }
     
     public override void SetDefaults() {
         Projectile.DamageType = ModContent.GetInstance<RogueDamageClass>();
 
-        Projectile.tileCollide = false;
+        Projectile.tileCollide = true;
         Projectile.ignoreWater = true;
         Projectile.friendly = true;
 
@@ -38,27 +38,6 @@ public class PrimordialReaper : ModProjectile
     }
 
     public override bool PreDraw(ref Color lightColor) {
-        var afterimage = ModContent.Request<Texture2D>(Texture + "_Afterimage").Value;
-
-        var length = ProjectileID.Sets.TrailCacheLength[Type];
-        
-        for (var i = 0; i < length; i += 2) {
-            var progress = 1f - i / (float)length;
-            
-            var color = Color.Lerp(new Color(255, 244, 0), new Color(93, 203, 243), progress);
-            
-            Main.EntitySpriteDraw(
-                afterimage,
-                Projectile.GetOldDrawPosition(i),
-                Projectile.GetDrawFrame(),
-                Projectile.GetAlpha(color) * progress,
-                Projectile.oldRot[i],
-                afterimage.Size() / 2f + Projectile.GetDrawOriginOffset(),
-                Projectile.scale,
-                SpriteEffects.None
-            );
-        }
-
         var texture = ModContent.Request<Texture2D>(Texture).Value;
         
         Main.EntitySpriteDraw(

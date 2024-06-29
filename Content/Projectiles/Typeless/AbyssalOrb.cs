@@ -1,6 +1,9 @@
 using System;
+using AbyssalBlessings.Common.Graphics;
+using AbyssalBlessings.Common.Graphics.Trails;
 using AbyssalBlessings.Utilities.Extensions;
 using CalamityMod.Buffs.DamageOverTime;
+using CalamityMod.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -40,8 +43,8 @@ public class AbyssalOrb : ModProjectile
     };
 
     public override void SetStaticDefaults() {
-        ProjectileID.Sets.TrailingMode[Type] = 2;
-        ProjectileID.Sets.TrailCacheLength[Type] = 10;
+        ProjectileID.Sets.TrailingMode[Type] = 3;
+        ProjectileID.Sets.TrailCacheLength[Type] = 20;
     }
 
     public override void SetDefaults() {
@@ -83,25 +86,19 @@ public class AbyssalOrb : ModProjectile
     }
 
     public override bool PreDraw(ref Color lightColor) {
-        var afterimage = ModContent.Request<Texture2D>(Texture + "_Afterimage").Value;
-
-        var length = ProjectileID.Sets.TrailCacheLength[Type];
+        var bloom = ModContent.Request<Texture2D>($"{nameof(AbyssalBlessings)}/Assets/Textures/Effects/Bloom").Value;
         
-        for (var i = 0; i < length; i += 2) {
-            var progress = 1f - i / (float)length;
-            
-            Main.EntitySpriteDraw(
-                afterimage,
-                Projectile.GetOldDrawPosition(i),
-                Projectile.GetDrawFrame(),
-                Projectile.GetAlpha(Color.White) * progress,
-                Projectile.oldRot[i],
-                afterimage.Size() / 2f + Projectile.GetDrawOriginOffset(),
-                Projectile.scale,
-                SpriteEffects.None
-            );
-        }
-
+        Main.EntitySpriteDraw(
+            bloom,
+            Projectile.GetDrawPosition(),
+            null,
+            Projectile.GetAlpha(new Color(220, 149, 0, 0)) * 0.75f,
+            Projectile.rotation,
+            bloom.Size() / 2f + Projectile.GetDrawOriginOffset(),
+            Projectile.scale * 0.6f,
+            SpriteEffects.None
+        );
+        
         var texture = ModContent.Request<Texture2D>(Texture).Value;
         
         Main.EntitySpriteDraw(
@@ -115,7 +112,35 @@ public class AbyssalOrb : ModProjectile
             SpriteEffects.None
         );
         
+        PixellatedRenderer.Queue(
+            () => {
+                var trail = new DoubleColorTrail(
+                    Projectile, 
+                    new Color(220, 149, 0),
+                    new Color(174, 84, 1),
+                    static progress => 16f * progress
+                );
+                
+                trail.Draw();
+            }
+        );
+
         return false;
+    }
+    
+    private void TriggerEffects() {
+        for (var i = 0; i < 3; i++) {
+            var particle = new GlowOrbParticle(
+                Projectile.Center,
+                Main.rand.NextVector2Circular(2f, 2f),
+                false,
+                60,
+                0.75f,
+                Projectile.GetAlpha(new Color(220, 149, 0, 0))
+            );
+
+            GeneralParticleHandler.SpawnParticle(particle);
+        }
     }
 
     private void UpdateOpacity() {
