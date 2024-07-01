@@ -107,19 +107,6 @@ public class EidolicEdgeSoul : ModProjectile
     }
 
     public override bool PreDraw(ref Color lightColor) {
-        var bloom = ModContent.Request<Texture2D>($"{nameof(AbyssalBlessings)}/Assets/Textures/Effects/Bloom").Value;
-        
-        Main.EntitySpriteDraw(
-            bloom,
-            Projectile.GetDrawPosition(),
-            null,
-            Projectile.GetAlpha(new Color(93, 203, 243, 0)) * 0.75f,
-            Projectile.rotation,
-            bloom.Size() / 2f + Projectile.GetDrawOriginOffset(),
-            Projectile.scale,
-            SpriteEffects.None
-        );
-
         var texture = ModContent.Request<Texture2D>(Texture).Value;
         
         Main.EntitySpriteDraw(
@@ -135,11 +122,24 @@ public class EidolicEdgeSoul : ModProjectile
         
         PixellatedRenderer.Queue(
             () => {
+                var bloom = ModContent.Request<Texture2D>($"{nameof(AbyssalBlessings)}/Assets/Textures/Effects/Bloom").Value;
+        
+                Main.EntitySpriteDraw(
+                    bloom,
+                    Projectile.GetPixellatedDrawPosition(),
+                    null,
+                    Projectile.GetAlpha(new Color(93, 203, 243, 0)) * 0.75f,
+                    Projectile.rotation,
+                    bloom.Size() / 2f + Projectile.GetDrawOriginOffset(),
+                    Projectile.scale * 0.6f,
+                    SpriteEffects.None
+                );
+                
                 var trail = new DoubleColorTrail(
                     Projectile, 
                     new Color(93, 203, 243),
                     new Color(72, 135, 205),
-                    static progress => 32f * progress
+                    static progress => MathHelper.Lerp(10f, 100f, progress)
                 );
     
                 trail.Draw();

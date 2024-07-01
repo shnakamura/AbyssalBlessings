@@ -7,6 +7,7 @@ using CalamityMod.Buffs.DamageOverTime;
 using CalamityMod.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -79,19 +80,33 @@ public class AbyssalThrow : ModProjectile
     }
 
     public override bool PreDraw(ref Color lightColor) {
-        var bloom = ModContent.Request<Texture2D>($"{nameof(AbyssalBlessings)}/Assets/Textures/Effects/Bloom").Value;
-        
-        Main.EntitySpriteDraw(
-            bloom,
-            Projectile.GetDrawPosition(),
-            null,
-            Projectile.GetAlpha(new Color(93, 203, 243, 0)) * 0.75f,
-            Projectile.rotation,
-            bloom.Size() / 2f + Projectile.GetDrawOriginOffset(),
-            Projectile.scale * 0.7f,
-            SpriteEffects.None
-        );
 
+        PixellatedRenderer.Queue(
+            () => {
+                var bloom = ModContent.Request<Texture2D>($"{nameof(AbyssalBlessings)}/Assets/Textures/Effects/Bloom").Value;
+        
+                Main.EntitySpriteDraw(
+                    bloom,
+                    Projectile.GetPixellatedDrawPosition(),
+                    null,
+                    Projectile.GetAlpha(new Color(93, 203, 243, 0)) * 0.75f,
+                    Projectile.rotation,
+                    bloom.Size() / 2f + Projectile.GetDrawOriginOffset(),
+                    Projectile.scale * 0.4f,
+                    SpriteEffects.None
+                );
+                
+                var trail = new DoubleColorTrail(
+                    Projectile, 
+                    new Color(93, 203, 243),
+                    new Color(72, 135, 205),
+                    static progress => MathHelper.Lerp(10f, 30f, progress)
+                );
+                
+                trail.Draw();
+            }
+        );
+        
         var texture = ModContent.Request<Texture2D>(Texture).Value;
         
         Main.EntitySpriteDraw(
@@ -103,19 +118,6 @@ public class AbyssalThrow : ModProjectile
             texture.Size() / 2f + Projectile.GetDrawOriginOffset(),
             Projectile.scale,
             SpriteEffects.None
-        );
-        
-        PixellatedRenderer.Queue(
-            () => {
-                var trail = new DoubleColorTrail(
-                    Projectile, 
-                    new Color(93, 203, 243),
-                    new Color(72, 135, 205),
-                    static progress => 64f * progress
-                );
-    
-                trail.Draw();
-            }
         );
         
         return false;

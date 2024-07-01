@@ -41,14 +41,14 @@ public struct DoubleColorTrail : ITrail
             return;
         }
         
-        var data = GameShaders.Misc["MagicMissile"];
+        var data = GameShaders.Misc["RainbowRod"];
 
         data.UseSaturation(-2.8f);
         data.UseOpacity(2f);
         
         data.Apply();
 
-        Strip.PrepareStripWithProceduralPadding(
+        Strip.PrepareStrip(
             Projectile.oldPos,
             Projectile.oldRot,
             GetStripColor,
@@ -65,16 +65,16 @@ public struct DoubleColorTrail : ITrail
         var interpolation = Color.Lerp(
             Start,
             End,
-            progress
+            1f - progress
         );
 
-        var color = Projectile.GetAlpha(ColorCallback?.Invoke(progress) ?? interpolation * progress);
+        var color = Projectile.GetAlpha(ColorCallback?.Invoke(progress) ?? interpolation * (1f - progress));
         
         return color;
     }
 
     private float GetStripWidth(float progress) {
-        var width = WidthCallback?.Invoke(progress) ?? progress;
+        var width = WidthCallback?.Invoke(progress) ?? (1f - progress);
         
         return width;
     }

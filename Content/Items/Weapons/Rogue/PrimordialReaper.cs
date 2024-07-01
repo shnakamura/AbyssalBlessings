@@ -43,7 +43,7 @@ public class PrimordialReaper : ModItem
             Item.position.Y - Main.screenPosition.Y + Item.height - texture.Height / 2f
         );
 
-        Main.GetItemDrawFrame(Item.type, out _, out var frame);
+        Main.GetItemDrawFrame(Type, out _, out var frame);
 
         spriteBatch.Draw(
             texture,

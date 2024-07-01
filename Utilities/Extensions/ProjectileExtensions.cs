@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.GameContent;
@@ -18,9 +19,27 @@ public static class ProjectileExtensions
     /// <param name="projectile">The projectile instance to get the draw position from.</param>
     /// <param name="centered">Whether the draw position should be calculated using the projectile's center or not.</param>
     /// <returns>The projectile's position converted into screen cordinates.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector2 GetDrawPosition(this Projectile projectile, bool centered = true) {
         return (centered ? projectile.Center : projectile.position)
             - Main.screenPosition
+            + new Vector2(0f, projectile.gfxOffY)
+            + new Vector2(projectile.ModProjectile == null ? 0f : projectile.ModProjectile.DrawOffsetX, 0f);
+    }
+
+    /// <summary>
+    ///     Gets the projectile's position as screen coordinates for pixellation effects.
+    /// </summary>
+    /// <remarks>
+    ///     This automatically accounts for draw offsets that are normally applied to projectiles.
+    /// </remarks>
+    /// <param name="projectile">The projectile instance to get the draw position from.</param>
+    /// <param name="centered">Whether the draw position should be calculated using the projectile's center or not.</param>
+    /// <returns>The projectile's position converted into screen cordinates.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Vector2 GetPixellatedDrawPosition(this Projectile projectile, bool centered = true) {
+        return (centered ? projectile.Center : projectile.position)
+            - Main.screenPosition / 2f
             + new Vector2(0f, projectile.gfxOffY)
             + new Vector2(projectile.ModProjectile == null ? 0f : projectile.ModProjectile.DrawOffsetX, 0f);
     }
@@ -35,6 +54,7 @@ public static class ProjectileExtensions
     /// <param name="i">The index of the current old position.</param>
     /// <param name="centered">Whether the draw position should be calculated using the projectile's center or not.</param>
     /// <returns>The projectile's old draw position at given index converted into screen coordinates.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector2 GetOldDrawPosition(this Projectile projectile, int i, bool centered = true) {
         return projectile.oldPos[i]
             + (centered ? projectile.Size / 2f : Vector2.Zero)
@@ -52,6 +72,7 @@ public static class ProjectileExtensions
     /// </remarks>
     /// <param name="projectile">The projectile instance to get the origin offset from.</param>
     /// <returns>The projectile's origin offset.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector2 GetDrawOriginOffset(this Projectile projectile) {
         return projectile.ModProjectile == null
             ? Vector2.Zero
@@ -63,6 +84,7 @@ public static class ProjectileExtensions
     /// </summary>
     /// <param name="projectile">The projectile instance to get the source rectangle from.</param>
     /// <returns>The projectile's source rectangle.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Rectangle GetDrawFrame(this Projectile projectile) {
         return TextureAssets.Projectile[projectile.type].Value.Frame(1, Main.projFrames[projectile.type], 0, projectile.frame);
     }
@@ -75,6 +97,7 @@ public static class ProjectileExtensions
     /// </remarks>
     /// <param name="projectile">The projectile instance to check the validation from.</param>
     /// <returns><c>true</c> if the projectile has a valid owner; otherwise, <c>false</c>.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool HasValidOwner(this Projectile projectile) {
         var owner = Main.player[projectile.owner];
 

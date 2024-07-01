@@ -36,25 +36,9 @@ public sealed class PixellatedRenderer : ModSystem
         );
         
         On_Main.DrawProjectiles += (orig, self) => {
+            DrawTarget();
+            
             orig(self);
-
-            if (Target == null || Target.IsDisposed) {
-                return;
-            }
-
-            Main.spriteBatch.Begin(
-                SpriteSortMode.Immediate,
-                BlendState.NonPremultiplied,
-                SamplerState.PointWrap,
-                DepthStencilState.None,
-                RasterizerState.CullNone,
-                null,
-                Main.GameViewMatrix.TransformationMatrix
-            );
-
-            Main.spriteBatch.Draw(Target, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.White);
-
-            Main.spriteBatch.End();
         };
 
         Main.OnResolutionChanged += ResizeTarget;
@@ -74,7 +58,7 @@ public sealed class PixellatedRenderer : ModSystem
         device.SetRenderTarget(Target);
         device.Clear(Color.Transparent);
         
-        Main.spriteBatch.Begin(SpriteSortMode.Texture, BlendState.NonPremultiplied);
+        Main.spriteBatch.Begin(SpriteSortMode.Texture, BlendState.AlphaBlend);
 
         foreach (var action in Actions) {
             action?.Invoke();
@@ -107,5 +91,25 @@ public sealed class PixellatedRenderer : ModSystem
                 );
             }
         );
+    }
+
+    private static void DrawTarget() {
+        if (Target == null || Target.IsDisposed) {
+            return;
+        }
+
+        Main.spriteBatch.Begin(
+            SpriteSortMode.Deferred,
+            BlendState.AlphaBlend,
+            SamplerState.PointClamp,
+            DepthStencilState.None,
+            RasterizerState.CullNone,
+            null,
+            Main.GameViewMatrix.TransformationMatrix
+        );
+
+        Main.spriteBatch.Draw(Target, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.White);
+
+        Main.spriteBatch.End();
     }
 }

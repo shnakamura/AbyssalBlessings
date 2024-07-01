@@ -40,7 +40,7 @@ public class AbyssalOrb : ModProjectile
     public static readonly SoundStyle HitSound = new($"{nameof(AbyssalBlessings)}/Assets/Sounds/Custom/AbyssalOrbHit", 4) {
         PitchVariance = 0.5f,
         MaxInstances = 5,
-        Volume = 0.75f
+        Volume = 0.5f
     };
 
     public override void SetStaticDefaults() {
@@ -87,19 +87,6 @@ public class AbyssalOrb : ModProjectile
     }
 
     public override bool PreDraw(ref Color lightColor) {
-        var bloom = ModContent.Request<Texture2D>($"{nameof(AbyssalBlessings)}/Assets/Textures/Effects/Bloom").Value;
-        
-        Main.EntitySpriteDraw(
-            bloom,
-            Projectile.GetDrawPosition(),
-            null,
-            Projectile.GetAlpha(new Color(220, 149, 0, 0)) * 0.75f,
-            Projectile.rotation,
-            bloom.Size() / 2f + Projectile.GetDrawOriginOffset(),
-            Projectile.scale * 0.6f,
-            SpriteEffects.None
-        );
-        
         var texture = ModContent.Request<Texture2D>(Texture).Value;
         
         Main.EntitySpriteDraw(
@@ -115,11 +102,24 @@ public class AbyssalOrb : ModProjectile
         
         PixellatedRenderer.Queue(
             () => {
+                var bloom = ModContent.Request<Texture2D>($"{nameof(AbyssalBlessings)}/Assets/Textures/Effects/Bloom").Value;
+        
+                Main.EntitySpriteDraw(
+                    bloom,
+                    Projectile.GetPixellatedDrawPosition(),
+                    null,
+                    Projectile.GetAlpha(new Color(220, 149, 0, 0)) * 0.75f,
+                    Projectile.rotation,
+                    bloom.Size() / 2f + Projectile.GetDrawOriginOffset(),
+                    Projectile.scale * 0.4f,
+                    SpriteEffects.None
+                );
+                
                 var trail = new DoubleColorTrail(
                     Projectile, 
                     new Color(220, 149, 0),
                     new Color(174, 84, 1),
-                    static progress => 16f * progress
+                    static progress => MathHelper.Lerp(10f, 30f, progress)
                 );
                 
                 trail.Draw();
