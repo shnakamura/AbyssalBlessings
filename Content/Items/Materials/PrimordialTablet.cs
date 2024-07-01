@@ -11,7 +11,7 @@ public class PrimordialTablet : ModItem
 
         Item.width = 66;
         Item.height = 56;
-        
+
         Item.rare = ModContent.RarityType<Abyssal>();
     }
 }

@@ -22,7 +22,7 @@ public class MagicalIceStone : ModItem
             if (!Wearing) {
                 return;
             }
-            
+
             var item = ModContent.GetInstance<MagicalIceStone>();
 
             Player.head = EquipLoader.GetEquipSlot(Mod, item.Name, EquipType.Head);
@@ -30,7 +30,7 @@ public class MagicalIceStone : ModItem
             Player.legs = EquipLoader.GetEquipSlot(Mod, item.Name, EquipType.Legs);
         }
     }
-    
+
     public override void Load() {
         if (Main.netMode == NetmodeID.Server) {
             return;
@@ -40,7 +40,7 @@ public class MagicalIceStone : ModItem
         EquipLoader.AddEquipTexture(Mod, $"{Texture}_{EquipType.Body}", EquipType.Body, this);
         EquipLoader.AddEquipTexture(Mod, $"{Texture}_{EquipType.Legs}", EquipType.Legs, this);
     }
-    
+
     public override void SetStaticDefaults() {
         var equipSlotHead = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Head);
         var equipSlotBody = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Body);
@@ -51,11 +51,11 @@ public class MagicalIceStone : ModItem
         ArmorIDs.Body.Sets.HidesTopSkin[equipSlotBody] = true;
         ArmorIDs.Legs.Sets.HidesBottomSkin[equipSlotLegs] = true;
     }
-    
+
     public override void SetDefaults() {
         Item.accessory = true;
         Item.vanity = true;
-        
+
         Item.width = 34;
         Item.height = 42;
     }

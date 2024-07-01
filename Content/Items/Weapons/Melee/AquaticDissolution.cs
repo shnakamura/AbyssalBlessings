@@ -29,12 +29,12 @@ public class AquaticDissolution : ModItem
         Item.useStyle = ItemUseStyleID.Swing;
 
         Item.shootSpeed = 12f;
-        Item.shoot = ModContent.ProjectileType<OceanBeam>();
+        Item.shoot = ModContent.ProjectileType<Projectiles.Melee.AquaticDissolution>();
 
         Item.rare = ModContent.RarityType<Turquoise>();
         Item.value = CalamityGlobalItem.RarityTurquoiseBuyPrice;
     }
-    
+
     public override void MeleeEffects(Player player, Rectangle hitbox) {
         if (!Main.rand.NextBool(5)) {
             return;

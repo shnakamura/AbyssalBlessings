@@ -11,7 +11,7 @@ public class Siren : ModProjectile
     ///     The projectile's minimum distance in pixel units required for teleporting to the owner.
     /// </summary>
     public const float MinTeleportDistance = 100f * 16f;
-    
+
     public override void SetStaticDefaults() {
         Main.projPet[Type] = true;
 
@@ -35,18 +35,18 @@ public class Siren : ModProjectile
         Projectile.alpha = (int)MathHelper.Clamp(Projectile.alpha, 0, 255);
 
         Projectile.rotation = Projectile.velocity.X * 0.1f;
-        
+
         FadeIn();
-        
+
         if (!Projectile.TryGetOwner(out var owner) || !owner.HasBuff<Buffs.Siren>()) {
             FadeOut();
             return;
         }
-        
+
         Projectile.timeLeft = 2;
 
         UpdateMovement(owner);
-        
+
         Lighting.AddLight(Projectile.Center, 0f, 0.5f, 0.5f);
 
         if (Projectile.DistanceSQ(owner.Center) <= MinTeleportDistance * MinTeleportDistance) {
@@ -73,7 +73,7 @@ public class Siren : ModProjectile
 
         Projectile.Kill();
     }
-    
+
     private void UpdateMovement(Player owner) {
         var addon = Vector2.Zero;
         var boost = 8f * 16f;
@@ -93,16 +93,16 @@ public class Siren : ModProjectile
         if (owner.controlDown) {
             addon.Y += boost * 2;
         }
-        
+
         var position = owner.Center - new Vector2(0f, 8f * 16f) + addon;
         var direction = Projectile.DirectionTo(position);
-        
+
         var speed = 12f;
         var inertia = 10f;
 
         var difference = position - Projectile.Center;
         var length = difference.LengthSquared();
-        
+
         var threshold = 32f;
 
         if (length > threshold * threshold) {

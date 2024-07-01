@@ -28,8 +28,6 @@ public class Mariana : ModItem
         Item.rare = ItemRarityID.Lime;
     }
 
-    public override void AddRecipes() { }
-
     public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone) {
         var amount = Main.rand.Next(2, 4);
 
